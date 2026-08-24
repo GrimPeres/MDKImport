@@ -109,15 +109,85 @@
     background:#fff;
     border:1px solid var(--line);
     box-shadow:0 8px 28px rgba(28,47,33,0.12);
-    margin-bottom:28px;
+    margin-bottom:18px;
     overflow:hidden;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
-  .viewer-frame{
+  #flipbook-loading{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    padding:24px;
+  }
+
+  .spinner{
+    width:34px;
+    height:34px;
+    border:3px solid rgba(47,74,52,0.15);
+    border-top-color:var(--forest);
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  #flipbook-progress{
+    font-size:13px;
+    color:#6b7168;
+  }
+
+  #book{
     width:100%;
     height:100%;
-    border:0;
+  }
+
+  #book .page{
+    background:#fff;
+  }
+
+  #book .page img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
     display:block;
+    background:#fff;
+  }
+
+  .flip-controls{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    margin-bottom:28px;
+  }
+
+  .flip-btn{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid var(--forest);
+    background:transparent;
+    color:var(--forest-dark);
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background 0.2s ease;
+  }
+  .flip-btn:hover{background:rgba(47,74,52,0.08);}
+  .flip-btn:disabled{opacity:0.35; cursor:default;}
+
+  #pageIndicator{
+    font-size:13px;
+    color:#6b7168;
+    min-width:64px;
+    text-align:center;
   }
 
   .cta-row{
@@ -267,9 +337,17 @@
     </p>
 
     <div class="viewer">
-      <iframe class="viewer-frame" src="catalogo-MDKimport.pdf#toolbar=1" title="Catalogue MDK Import">
-        <p style="padding:20px;font-family:sans-serif;">Votre navigateur n'affiche pas le PDF intégré. <a href="catalogo-MDKimport.pdf">Ouvrez le catalogue directement</a>.</p>
-      </iframe>
+      <div id="flipbook-loading">
+        <div class="spinner"></div>
+        <div id="flipbook-progress">Chargement du catalogue… 0%</div>
+      </div>
+      <div id="book"></div>
+    </div>
+
+    <div class="flip-controls" id="flip-controls">
+      <button class="flip-btn" id="prevPage" aria-label="Page précédente">‹</button>
+      <span id="pageIndicator">1 / 1</span>
+      <button class="flip-btn" id="nextPage" aria-label="Page suivante">›</button>
     </div>
 
     <div class="cta-row">
@@ -306,6 +384,90 @@
     <div class="address">Route de la Glâne 16b · 1684 Chavannes-les-Forts · Suisse</div>
     <div class="soon">Site complet à venir</div>
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+  <script>
+  (async function(){
+    var PDF_URL = 'catalogo-MDKimport.pdf';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    var loadingEl = document.getElementById('flipbook-loading');
+    var progressEl = document.getElementById('flipbook-progress');
+    var bookEl = document.getElementById('book');
+    var controlsEl = document.getElementById('flip-controls');
+    var pageIndicator = document.getElementById('pageIndicator');
+    var prevBtn = document.getElementById('prevPage');
+    var nextBtn = document.getElementById('nextPage');
+
+    try {
+      var pdf = await pdfjsLib.getDocument(PDF_URL).promise;
+      var total = pdf.numPages;
+      var targetWidth = 720;
+
+      for (var i = 1; i <= total; i++) {
+        var page = await pdf.getPage(i);
+        var vp1 = page.getViewport({ scale: 1 });
+        var scale = targetWidth / vp1.width;
+        var viewport = page.getViewport({ scale: scale });
+
+        var canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        var ctx = canvas.getContext('2d');
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+        var pageDiv = document.createElement('div');
+        pageDiv.className = 'page';
+        var img = document.createElement('img');
+        img.src = canvas.toDataURL('image/jpeg', 0.78);
+        pageDiv.appendChild(img);
+        bookEl.appendChild(pageDiv);
+
+        progressEl.textContent = 'Chargement du catalogue… ' + Math.round((i / total) * 100) + '%';
+      }
+
+      loadingEl.style.display = 'none';
+      controlsEl.style.display = 'flex';
+      pageIndicator.textContent = '1 / ' + total;
+
+      var pageFlip = new St.PageFlip(bookEl, {
+        width: 500,
+        height: 700,
+        size: 'stretch',
+        minWidth: 280,
+        maxWidth: 900,
+        minHeight: 380,
+        maxHeight: 1200,
+        showCover: false,
+        mobileScrollSupport: false,
+        maxShadowOpacity: 0.4,
+        usePortrait: true
+      });
+      pageFlip.loadFromHTML(document.querySelectorAll('#book .page'));
+
+      function updateIndicator(){
+        var current = pageFlip.getCurrentPageIndex();
+        pageIndicator.textContent = (current + 1) + ' / ' + total;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current >= total - 1;
+      }
+      pageFlip.on('flip', updateIndicator);
+      updateIndicator();
+
+      prevBtn.addEventListener('click', function(){ pageFlip.flipPrev(); });
+      nextBtn.addEventListener('click', function(){ pageFlip.flipNext(); });
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'ArrowRight') pageFlip.flipNext();
+        if (e.key === 'ArrowLeft') pageFlip.flipPrev();
+      });
+
+    } catch (err) {
+      console.error(err);
+      loadingEl.innerHTML = '<p style="padding:20px;font-size:14px;text-align:center;">Aperçu indisponible pour le moment. <a href="' + PDF_URL + '">Ouvrez le catalogue directement</a>.</p>';
+    }
+  })();
+  </script>
 
 </body>
 </html>

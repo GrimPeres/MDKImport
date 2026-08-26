@@ -1,0 +1,326 @@
+:root{
+  --paper:#f6f1e7;
+  --ink:#20261f;
+  --forest:#2f4a34;
+  --forest-dark:#1c2f21;
+  --kraft:#b98a52;
+  --kraft-dark:#8f6a3c;
+  --line: rgba(32,38,31,0.14);
+}
+
+*{box-sizing:border-box;}
+
+html,body{margin:0;padding:0;}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Karla', sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* subtle paper texture via layered radial gradients */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(47,74,52,0.05), transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(185,138,82,0.08), transparent 45%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:720px;
+  margin:0 auto;
+  padding:64px 24px 40px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  flex:1;
+  width:100%;
+  transition:max-width 0.2s ease;
+}
+
+.mark{
+  width:220px;
+  height:auto;
+  margin-bottom:32px;
+  animation:rise 0.9s ease-out both;
+}
+
+@keyframes rise{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.eyebrow{
+  font-size:12px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--kraft-dark);
+  font-weight:600;
+  margin-bottom:14px;
+}
+
+h1{
+  font-family:'Fraunces', serif;
+  font-optical-sizing:auto;
+  font-weight:500;
+  font-size:clamp(30px, 4vw, 50px);
+  line-height:1.15;
+  text-align:center;
+  margin:0 0 18px;
+  color:var(--forest-dark);
+  max-width:20ch;
+}
+
+p.lead{
+  text-align:center;
+  font-size:17px;
+  line-height:1.6;
+  color:#3b4239;
+  max-width:44ch;
+  margin:0 0 40px;
+}
+
+/* Book / PDF viewer — kept at a fixed reading width (A4 portrait ratio)
+   even on wide screens, so it never switches into a two-page spread. */
+.viewer{
+  width:100%;
+  max-width:480px;
+  aspect-ratio:210 / 297;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 8px 28px rgba(28,47,33,0.12);
+  margin-bottom:18px;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#flipbook-loading{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:24px;
+}
+
+.spinner{
+  width:34px;
+  height:34px;
+  border:3px solid rgba(47,74,52,0.15);
+  border-top-color:var(--forest);
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#flipbook-progress{
+  font-size:13px;
+  color:#6b7168;
+}
+
+#book{
+  width:100%;
+  height:100%;
+}
+
+#book .page{
+  background:#fff;
+}
+
+#book .page img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  background:#fff;
+}
+
+.flip-controls{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-bottom:28px;
+}
+
+.flip-btn{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:1px solid var(--forest);
+  background:transparent;
+  color:var(--forest-dark);
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background 0.2s ease;
+}
+.flip-btn:hover{background:rgba(47,74,52,0.08);}
+.flip-btn:disabled{opacity:0.35; cursor:default;}
+
+#pageIndicator{
+  font-size:13px;
+  color:#6b7168;
+  min-width:64px;
+  text-align:center;
+}
+
+.cta-row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+}
+
+.cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  background:var(--forest);
+  color:var(--paper);
+  text-decoration:none;
+  font-weight:600;
+  font-size:16px;
+  padding:16px 30px;
+  border-radius:2px;
+  letter-spacing:0.01em;
+  box-shadow:0 1px 0 rgba(0,0,0,0.05);
+  transition:background 0.2s ease, transform 0.2s ease;
+  border:1px solid var(--forest-dark);
+}
+.cta:hover{background:var(--forest-dark); transform:translateY(-1px);}
+.cta svg{flex-shrink:0;}
+
+.cta-ghost{
+  background:transparent;
+  color:var(--forest-dark);
+  border:1px solid var(--forest);
+}
+.cta-ghost:hover{background:rgba(47,74,52,0.08); transform:translateY(-1px);}
+
+.cta-note{
+  margin-top:12px;
+  font-size:13px;
+  color:#6b7168;
+}
+
+.divider{
+  width:100%;
+  max-width:420px;
+  height:1px;
+  background:var(--line);
+  margin:56px 0 40px;
+}
+
+.categories{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px 10px;
+  max-width:520px;
+  margin-bottom:8px;
+}
+
+.categories span{
+  font-size:12.5px;
+  color:var(--forest-dark);
+  background:rgba(47,74,52,0.07);
+  border:1px solid rgba(47,74,52,0.14);
+  padding:6px 12px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+
+footer{
+  position:relative;
+  z-index:1;
+  border-top:1px solid var(--line);
+  padding:32px 24px 36px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+}
+
+.contact-name{
+  font-family:'Fraunces', serif;
+  font-size:16px;
+  font-weight:600;
+  color:var(--forest-dark);
+}
+
+.contact-role{
+  font-size:12.5px;
+  color:#6b7168;
+  letter-spacing:0.03em;
+  margin-top:-8px;
+}
+
+.contact-links{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px 20px;
+  font-size:14px;
+}
+
+.contact-links a{
+  color:var(--ink);
+  text-decoration:none;
+  border-bottom:1px solid var(--line);
+  padding-bottom:1px;
+  transition:border-color 0.2s ease, color 0.2s ease;
+}
+.contact-links a:hover{border-color:var(--kraft-dark); color:var(--kraft-dark);}
+
+.address{
+  font-size:13px;
+  color:#6b7168;
+  line-height:1.5;
+}
+
+.soon{
+  font-size:12px;
+  color:#8b8f85;
+  margin-top:6px;
+}
+
+/* Mobile: unchanged, compact layout */
+@media (max-width:480px){
+  .wrap{padding-top:48px;}
+  .mark{width:170px;}
+  .cta-row{flex-direction:column; width:100%;}
+  .cta{justify-content:center;}
+}
+
+/* Desktop: widen the overall page so it breathes more on large screens.
+   The book viewer itself stays capped at 480px (see .viewer) so it
+   never flips into a two-page spread — only the surrounding content
+   (title, text, categories, footer) gets extra room. */
+@media (min-width:900px){
+  .wrap{max-width:1040px; padding-top:88px;}
+  p.lead{max-width:56ch; font-size:18px;}
+  .categories{max-width:680px;}
+  footer{padding-top:40px;}
+}
+
+@media (min-width:1300px){
+  .wrap{max-width:1180px;}
+}

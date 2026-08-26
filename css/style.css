@@ -398,17 +398,18 @@ footer{
   .categories{justify-content:flex-start; max-width:100%;}
 
   .book-col{
-    width:auto;
-    flex:0 0 auto;
+    width:520px;
+    flex:0 0 520px;
     position:sticky;
     top:56px;
   }
 
-  .viewer{max-width:520px;}
+  .viewer{width:100%; max-width:520px;}
 }
 
 @media (min-width:1300px){
   .wrap{max-width:1280px; gap:96px;}
   .intro{max-width:480px;}
+  .book-col{width:560px; flex:0 0 560px;}
   .viewer{max-width:560px;}
 }

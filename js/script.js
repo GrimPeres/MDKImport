@@ -1,17 +1,26 @@
 (function () {
   var PDF_URL = 'catalogo-MDKimport.pdf';
 
-  // Mobile always gets the simple native browser PDF viewer — cheap,
-  // just point the iframe at the file.
-  var mobileFrame = document.getElementById('mobileFrame');
-  if (mobileFrame) mobileFrame.src = PDF_URL + '#toolbar=1';
-
-  // Desktop gets the page-flip book. Only build it on desktop-sized
-  // screens, so mobile visitors never pay the cost of rendering 109
-  // pages they won't see.
+  // Single source of truth for desktop vs. mobile: computed once here in
+  // JS, then applied as a class on <body>. CSS keys visibility off this
+  // same class (not off its own separate @media check) so the JS
+  // decision (build the book / load the simple viewer) can never
+  // disagree with what's actually shown — on some Android devices a
+  // JS matchMedia() and a CSS @media query can round the same width
+  // differently right around a breakpoint, which was causing both
+  // viewers to render at once.
   var isDesktop = window.matchMedia('(min-width: 900px)').matches;
-  if (!isDesktop) return;
+  document.body.classList.add(isDesktop ? 'is-desktop' : 'is-mobile');
 
+  if (!isDesktop) {
+    // Mobile: simple native browser PDF viewer — cheap, just point the
+    // iframe at the file.
+    var mobileFrame = document.getElementById('mobileFrame');
+    if (mobileFrame) mobileFrame.src = PDF_URL + '#toolbar=1';
+    return;
+  }
+
+  // Desktop: page-flip book, built with JS/canvas.
   buildFlipbook();
 
   async function buildFlipbook() {

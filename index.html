@@ -26,20 +26,14 @@
       plus ou passer commande.
     </p>
 
-    <!-- Desktop: page-flip book (2-page spread), built with JS/canvas -->
+    <!-- Desktop: page-flip book (2-page spread), built with pdf.js + the
+         page-flip library, used in its native landscape/spread mode -->
     <div class="viewer viewer-desktop" id="desktopViewer">
       <div id="flipbook-loading">
         <div class="spinner"></div>
         <div id="flipbook-progress">Chargement du catalogue… 0%</div>
       </div>
-      <div id="book-stage">
-        <img id="pageBehind" class="book-page-img" alt="">
-        <img id="pageFront" class="book-page-img" alt="">
-        <div id="flipPanel" class="flip-panel">
-          <div class="flip-face flip-front"><img id="flipFrontImg" alt=""></div>
-          <div class="flip-face flip-back"><img id="flipBackImg" alt=""></div>
-        </div>
-      </div>
+      <div id="book"></div>
     </div>
 
     <div class="flip-controls" id="flip-controls">
@@ -48,7 +42,9 @@
       <button class="flip-btn" id="nextPage" aria-label="Page suivante">›</button>
     </div>
 
-    <!-- Mobile: native browser PDF viewer, simple page-by-page scroll -->
+    <!-- Mobile: PDF rendered through Google's viewer (works reliably
+         inline across mobile browsers, unlike a raw <iframe src="*.pdf">
+         which some mobile browsers just download instead of showing) -->
     <div class="viewer viewer-mobile" id="mobileViewer">
       <iframe class="viewer-frame" id="mobileFrame" title="Catalogue MDK Import">
         <p style="padding:20px;font-family:sans-serif;">Votre navigateur n'affiche pas le PDF intégré. <a href="catalogo-MDKimport.pdf">Ouvrez le catalogue directement</a>.</p>
@@ -92,6 +88,7 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
   <script src="js/script.js"></script>
 
 </body>

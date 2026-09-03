@@ -109,7 +109,11 @@ p.lead{
   display:block;
 }
 
-/* ---- Desktop viewer: hand-built page-flip book, 2-page spread ---- */
+/* ---- Desktop viewer: page-flip book (page-flip library), 2-page
+   spread — its native, well-tested mode. usePortrait:false in the JS
+   config keeps it in this mode always (see js/script.js): the single-
+   page "portrait" mode is a separate, known-buggy code path we avoid
+   entirely by never enabling it. */
 .viewer-desktop{
   display:none;
   width:100%;
@@ -121,18 +125,6 @@ p.lead{
   margin-bottom:18px;
   overflow:hidden;
   position:relative;
-  perspective:2200px;
-}
-
-/* faint center spine, like a real open book */
-.viewer-desktop::after{
-  content:"";
-  position:absolute;
-  top:0; bottom:0; left:50%;
-  width:1px;
-  background:rgba(32,38,31,0.1);
-  z-index:4;
-  pointer-events:none;
 }
 
 #flipbook-loading{
@@ -163,44 +155,16 @@ p.lead{
   color:#6b7168;
 }
 
-#book-stage{
-  display:none;
-  position:relative;
+#book{
   width:100%;
   height:100%;
-  transform-style:preserve-3d;
 }
 
-.book-page-img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  background:#fff;
-  display:block;
-}
-#pageFront{ z-index:2; }
-#pageBehind{ z-index:1; }
-
-.flip-panel{
-  position:absolute;
-  inset:0;
-  z-index:3;
-  transform-style:preserve-3d;
-  pointer-events:none;
-}
-
-.flip-face{
-  position:absolute;
-  inset:0;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  overflow:hidden;
+#book .page{
   background:#fff;
 }
 
-.flip-face img{
+#book .page img{
   width:100%;
   height:100%;
   object-fit:contain;

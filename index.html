@@ -14,63 +14,59 @@
 <body>
 
   <main class="wrap">
-    <div class="intro">
-      <img class="mark" src="img/logo.png" alt="MDK Import">
+    <img class="mark" src="img/logo.png" alt="MDK Import">
 
-      <div class="eyebrow">Tarifs 2026</div>
-      <h1>Notre catalogue d'emballages, prêt à consulter</h1>
-      <p class="lead">
-        Distributeur d'emballages et de produits jetables en Suisse romande —
-        sacs, films, boîtes et équipements de protection. Le nouveau site
-        MDK Import arrive bientôt ; en attendant, découvrez nos produits
-        et nos tarifs dans le catalogue ci-dessous.
-      </p>
+    <div class="eyebrow">Tarifs 2026</div>
+    <h1>Notre catalogue d'emballages, prêt à consulter</h1>
+    <p class="lead">
+      Distributeur d'emballages et de produits jetables en Suisse romande —
+      sacs, films, boîtes et équipements de protection. Le nouveau site
+      MDK Import arrive bientôt ; en attendant, découvrez nos produits
+      et nos tarifs dans le catalogue ci-dessous.
+    </p>
 
-      <div class="cta-row">
-        <a class="cta" href="MDKimport-Catalogo-FR-4.pdf" download>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Télécharger le catalogue
-        </a>
-        <a class="cta cta-ghost" href="MDKimport-Catalogo-FR-4.pdf" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Ouvrir dans un nouvel onglet
-        </a>
+    <div class="viewer">
+      <div id="flipbook-loading">
+        <div class="spinner"></div>
+        <div id="flipbook-progress">Chargement du catalogue… 0%</div>
       </div>
-      <div class="cta-note">109 pages · sacs, films, boîtes, descartáveis, protection &amp; hygiène</div>
-
-      <div class="divider"></div>
-
-      <div class="categories">
-        <span>Sacs plastique</span>
-        <span>Films &amp; emballage</span>
-        <span>Boîtes carton</span>
-        <span>Descartáveis</span>
-        <span>Protection &amp; hygiène</span>
-        <span>Équipements charcuterie</span>
+      <div id="book-stage">
+        <img id="pageBehind" class="book-page-img" alt="">
+        <img id="pageFront" class="book-page-img" alt="">
+        <div id="flipPanel" class="flip-panel">
+          <div class="flip-face flip-front"><img id="flipFrontImg" alt=""></div>
+          <div class="flip-face flip-back"><img id="flipBackImg" alt=""></div>
+        </div>
       </div>
     </div>
 
-    <div class="book-col">
-      <div class="viewer">
-        <div id="flipbook-loading">
-          <div class="spinner"></div>
-          <div id="flipbook-progress">Chargement du catalogue… 0%</div>
-        </div>
-        <div id="book-stage">
-          <img id="pageBehind" class="book-page-img" alt="">
-          <img id="pageFront" class="book-page-img" alt="">
-          <div id="flipPanel" class="flip-panel">
-            <div class="flip-face flip-front"><img id="flipFrontImg" alt=""></div>
-            <div class="flip-face flip-back"><img id="flipBackImg" alt=""></div>
-          </div>
-        </div>
-      </div>
+    <div class="flip-controls" id="flip-controls">
+      <button class="flip-btn" id="prevPage" aria-label="Page précédente">‹</button>
+      <span id="pageIndicator">1 / 1</span>
+      <button class="flip-btn" id="nextPage" aria-label="Page suivante">›</button>
+    </div>
 
-      <div class="flip-controls" id="flip-controls">
-        <button class="flip-btn" id="prevPage" aria-label="Page précédente">‹</button>
-        <span id="pageIndicator">1 / 1</span>
-        <button class="flip-btn" id="nextPage" aria-label="Page suivante">›</button>
-      </div>
+    <div class="cta-row">
+      <a class="cta" href="catalogo-MDKimport.pdf" download>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Télécharger le catalogue
+      </a>
+      <a class="cta cta-ghost" href="catalogo-MDKimport.pdf" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Ouvrir dans un nouvel onglet
+      </a>
+    </div>
+    <div class="cta-note">109 pages · sacs, films, boîtes, descartáveis, protection &amp; hygiène</div>
+
+    <div class="divider"></div>
+
+    <div class="categories">
+      <span>Sacs plastique</span>
+      <span>Films &amp; emballage</span>
+      <span>Boîtes carton</span>
+      <span>Descartáveis</span>
+      <span>Protection &amp; hygiène</span>
+      <span>Équipements charcuterie</span>
     </div>
   </main>
 

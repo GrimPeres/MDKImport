@@ -1,5 +1,5 @@
 (async function () {
-  var PDF_URL = 'MDKimport-Catalogo-FR-4.pdf';
+  var PDF_URL = 'catalogo-MDKimport.pdf';
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -22,25 +22,64 @@
   try {
     var pdf = await pdfjsLib.getDocument(PDF_URL).promise;
     var total = pdf.numPages;
-    var targetWidth = 720; // render resolution, independent of on-screen size
-    var pages = []; // dataURL per page, kept in memory only (not in the DOM)
+    var singleWidth = 500; // render resolution per page, independent of on-screen size
+
+    // Pre-render every page to its own canvas at a uniform size, then
+    // compose them in pairs into "spread" images (left + right side by
+    // side), so the on-screen book always shows two pages like a real
+    // open book — no live two-page-spread logic in the browser that
+    // could break, it's just one wide image per spread.
+    var pageCanvases = [];
+    var singleHeight = 0;
 
     for (var i = 1; i <= total; i++) {
       var page = await pdf.getPage(i);
       var vp1 = page.getViewport({ scale: 1 });
-      var scale = targetWidth / vp1.width;
+      var scale = singleWidth / vp1.width;
       var viewport = page.getViewport({ scale: scale });
+      if (!singleHeight) singleHeight = Math.round(viewport.height);
 
       var canvas = document.createElement('canvas');
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
+      canvas.width = singleWidth;
+      canvas.height = singleHeight;
       var ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      pageCanvases.push(canvas);
 
-      pages.push(canvas.toDataURL('image/jpeg', 0.78));
       progressEl.textContent =
-        'Chargement du catalogue… ' + Math.round((i / total) * 100) + '%';
+        'Chargement du catalogue… ' + Math.round((i / total) * 70) + '%';
     }
+
+    var spreadCount = Math.ceil(total / 2);
+    var spreads = [];
+    var spreadLabels = [];
+
+    for (var s = 0; s < spreadCount; s++) {
+      var leftNum = 2 * s + 1;
+      var rightNum = 2 * s + 2;
+
+      var spreadCanvas = document.createElement('canvas');
+      spreadCanvas.width = singleWidth * 2;
+      spreadCanvas.height = singleHeight;
+      var sctx = spreadCanvas.getContext('2d');
+      sctx.fillStyle = '#fff';
+      sctx.fillRect(0, 0, spreadCanvas.width, spreadCanvas.height);
+      sctx.drawImage(pageCanvases[leftNum - 1], 0, 0);
+      if (rightNum <= total) {
+        sctx.drawImage(pageCanvases[rightNum - 1], singleWidth, 0);
+      }
+
+      spreads.push(spreadCanvas.toDataURL('image/jpeg', 0.78));
+      spreadLabels.push(rightNum <= total ? (leftNum + '–' + rightNum) : String(leftNum));
+
+      progressEl.textContent =
+        'Chargement du catalogue… ' + (70 + Math.round(((s + 1) / spreadCount) * 30)) + '%';
+    }
+
+    // free the per-page canvases, we only need the spreads from here on
+    pageCanvases.length = 0;
 
     loadingEl.style.display = 'none';
     stageEl.style.display = 'block';
@@ -49,34 +88,32 @@
     var currentIndex = 0;
     var animating = false;
 
-    pageFrontImg.src = pages[0];
-    pageBehindImg.src = pages[0];
+    pageFrontImg.src = spreads[0];
+    pageBehindImg.src = spreads[0];
 
     function updateIndicator() {
-      pageIndicator.textContent = currentIndex + 1 + ' / ' + total;
+      pageIndicator.textContent = spreadLabels[currentIndex] + ' / ' + total;
       prevBtn.disabled = currentIndex === 0;
-      nextBtn.disabled = currentIndex >= total - 1;
+      nextBtn.disabled = currentIndex >= spreadCount - 1;
     }
     updateIndicator();
 
     // Hand-built page flip (no external library): a thin 3D panel with a
     // front and back face rotates around the right (next) or left (prev)
-    // edge. This sidesteps a known bug in third-party flipbook libraries
-    // where the single-page/portrait mode fails to render the back face,
-    // leaving the previous page hidden.
+    // edge, revealing the next/previous spread underneath.
     function flip(direction) {
       if (animating) return;
       var targetIndex = currentIndex + direction;
-      if (targetIndex < 0 || targetIndex >= total) return;
+      if (targetIndex < 0 || targetIndex >= spreadCount) return;
       animating = true;
 
       panel.style.transformOrigin = direction === 1 ? '100% 50%' : '0% 50%';
       frontFaceEl.style.transform = 'rotateY(0deg)';
       backFaceEl.style.transform = direction === 1 ? 'rotateY(180deg)' : 'rotateY(-180deg)';
 
-      frontImg.src = pages[currentIndex];
-      backImg.src = pages[targetIndex];
-      pageBehindImg.src = pages[targetIndex];
+      frontImg.src = spreads[currentIndex];
+      backImg.src = spreads[targetIndex];
+      pageBehindImg.src = spreads[targetIndex];
 
       panel.style.transition = 'none';
       panel.style.transform = 'rotateY(0deg)';
@@ -91,7 +128,7 @@
       panel.addEventListener('transitionend', function onEnd() {
         panel.removeEventListener('transitionend', onEnd);
         currentIndex = targetIndex;
-        pageFrontImg.src = pages[currentIndex];
+        pageFrontImg.src = spreads[currentIndex];
         panel.style.transition = 'none';
         panel.style.transform = 'rotateY(0deg)';
         animating = false;

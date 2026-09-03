@@ -1,5 +1,5 @@
 (function () {
-  var PDF_URL = 'catalogo-MDKimport.pdf';
+  var PDF_URL = 'MDKimport-Catalogo-FR.pdf';
 
   // Single source of truth for desktop vs. mobile: computed once here in
   // JS, then applied as a class on <body>. CSS keys visibility off this

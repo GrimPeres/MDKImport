@@ -80,6 +80,17 @@ h1{
   color:var(--forest-dark);
   max-width:18ch;
 }
+h2{
+  font-family:'Fraunces', serif;
+  font-optical-sizing:auto;
+  font-weight:500;
+  font-size:clamp(30px, 4vw, 46px);
+  line-height:1.15;
+  text-align:center;
+  margin:0 0 18px;
+  color:var(--forest-dark);
+  max-width:25ch;
+}
 
 p.lead{
   text-align:center;

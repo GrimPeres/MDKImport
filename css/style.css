@@ -86,7 +86,7 @@ p.lead{
   font-size:17px;
   line-height:1.6;
   color:#3b4239;
-  max-width:60ch;
+  max-width:80ch;
   margin:0 0 40px;
 }
 
@@ -353,7 +353,7 @@ footer{
 @media (min-width:900px){
   .wrap{max-width:980px; padding-top:88px;}
   h1{font-size:clamp(34px, 3.6vw, 52px); max-width:22ch;}
-  p.lead{max-width:58ch; font-size:18px;}
+  p.lead{max-width:80ch; font-size:18px;}
   .categories{max-width:720px;}
 }
 

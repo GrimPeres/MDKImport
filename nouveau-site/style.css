@@ -341,5 +341,5 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
    Place hero-film.webp and hero-sac-tnt.webp in nouveau-site/assets/. */
 .hero-art .art-shape{overflow:visible;background-image:none!important;border:0;isolation:isolate}
 .hero-art .art-shape::after{content:"";position:absolute;z-index:1;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;filter:drop-shadow(0 12px 12px rgba(12,48,30,.20))}
-.hero-art .art-shape.shape-one::after{inset:-18% -32%;background-image:url("fotos/hero-film.webp");transform:rotate(17deg)}
-.hero-art .art-shape.shape-two::after{inset:-23% -25%;background-image:url("fotos/hero-sac-tnt.webp");transform:rotate(-19deg)}
+.hero-art .art-shape.shape-one::after{inset:-18% -32%;background-image:url("assets/hero-film.webp");transform:rotate(17deg)}
+.hero-art .art-shape.shape-two::after{inset:-23% -25%;background-image:url("assets/hero-sac-tnt.webp");transform:rotate(-19deg)}

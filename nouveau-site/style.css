@@ -209,3 +209,16 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .devis-page select{border:1px solid var(--line);border-radius:10px;padding:12px;width:100%;background:#fff;color:var(--ink);font-size:13px;font-weight:400}
 .devis-page .devis-other-variant:not([hidden]){margin-top:9px}
 .devis-page .devis-other-variant[hidden]{display:none!important}
+
+/* Header hierarchy: Contact is navigation, Ma demande is the only prominent action */
+.header #navigation a.header-contact,
+.header #navigation a.header-contact:hover,
+.header #navigation a.header-contact:focus-visible{
+  background:transparent!important;border:0!important;box-shadow:none!important;
+  border-radius:0!important;padding:8px 0!important;min-height:auto!important;
+  color:var(--ink)!important;font-weight:600!important;
+}
+.header #navigation a.header-contact:hover,
+.header #navigation a.header-contact:focus-visible{color:var(--green2)!important;text-decoration:underline;text-underline-offset:5px}
+.header #navigation a.devis-nav{margin-left:10px}
+@media(max-width:850px){.header #navigation a.devis-nav{margin-left:0}}

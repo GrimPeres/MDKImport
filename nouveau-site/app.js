@@ -1,12 +1,12 @@
 "use strict";
 // Première sélection fidèle au catalogue 2026–2027. Import intégral à suivre.
 const categories=[
-{id:"sacs",name:"Sacs en plastique",pages:"4–39",icon:"▣"},
-{id:"films",name:"Films & gaines",pages:"40–56",icon:"▤"},
-{id:"papier",name:"Papier",pages:"57–81",icon:"▥"},
-{id:"jetables",name:"Consommables & jetables",pages:"82–98",icon:"◫"},
-{id:"sante",name:"Santé & protection",pages:"99–106",icon:"✚"},
-{id:"equipements",name:"Équipements",pages:"107–108",icon:"⚙"}];
+{id:"sacs",name:"Sacs en plastique",pages:"4–39",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>'},
+{id:"films",name:"Films & gaines",pages:"40–56",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="8" cy="12" rx="4" ry="8"/><path d="M8 4h9c2.2 0 4 3.6 4 8s-1.8 8-4 8H8"/><path d="M8 12h13"/></svg>'},
+{id:"papier",name:"Papier",pages:"57–81",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15H5z"/><path d="M16 3v4h3M8 11h8M8 15h8M8 19h5"/></svg>'},
+{id:"jetables",name:"Consommables & jetables",pages:"82–98",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-2 11H6L4 9Z"/><path d="M8 9V5h8v4M4 13h16"/></svg>'},
+{id:"sante",name:"Santé & protection",pages:"99–106",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z"/><path d="M12 7v10M7 12h10"/></svg>'},
+{id:"equipements",name:"Équipements",pages:"107–108",icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h5M16 13h1M7 17h10"/></svg>'}];
 const products=[
 {id:"bloc-e",name:"Bloc E",category:"sacs",page:5,description:"Sacs Bloc E — dimensions de 150 × 250 à 220 × 700."},
 {id:"sac-raphia",name:"Sac raphia PP Woven",category:"sacs",page:6,description:"Modèles Fruits, Culinaire et Boules. Boîtes de 100 unités."},

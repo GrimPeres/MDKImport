@@ -124,8 +124,7 @@
    '<section class="detail-table-section">'+(group.title?'<h3>'+safe(group.title)+'</h3>':'')+'<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+
    group.columns.map(x=>'<th scope="col">'+safe(x)+'</th>').join("")+'</tr></thead><tbody>'+
    group.rows.map(row=>'<tr>'+row.map(value=>'<td>'+safe(value)+'</td>').join("")+'</tr>').join("")+
-   '</tbody></table></div></section>').join("")+
-;
+   '</tbody></table></div></section>').join("");
 
  const subject=encodeURIComponent("Demande de devis — "+p.name);
  const body=encodeURIComponent("Bonjour,\nJe souhaite recevoir une offre pour : "+p.name+" (catalogue page "+p.page+").\nQuantité souhaitée : \nMerci.");

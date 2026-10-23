@@ -10,10 +10,10 @@
    // offer unrelated articles. Other pages intentionally represent full ranges.
    const familyFilters={
      "page-31":row=>true,
-     "page-101":row=>/^manchette\\b/i.test(String(row?.[0]||"").trim()),
-     "page-102":row=>/^cagoule\\b/i.test(String(row?.[0]||"").trim()),
-     "page-103":row=>/^protection pour coussins\\b/i.test(String(row?.[0]||"").trim()),
-     "page-104":row=>/^gants clown\\b/i.test(String(row?.[0]||"").trim())
+     "page-101":row=>/^manchette\b/i.test(String(row?.[0]||"").trim()),
+     "page-102":row=>/^cagoule\b/i.test(String(row?.[0]||"").trim()),
+     "page-103":row=>/^protection pour coussins\b/i.test(String(row?.[0]||"").trim()),
+     "page-104":row=>/^gants clown\b/i.test(String(row?.[0]||"").trim())
    };
    const scoped=familyFilters[id]?groups.map(g=>({...g,rows:(g.rows||[]).filter(familyFilters[id])})).filter(g=>g.rows.length):groups;
    return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).flatMap(row=>{

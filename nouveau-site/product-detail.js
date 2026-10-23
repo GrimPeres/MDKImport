@@ -40,9 +40,39 @@
       '<div class="detail-spec-item"><span class="spec-number">'+(i+1)+'</span><span>'+safe(line)+'</span></div>').join("")+'</div>':'')+
     '</section>';
  }).join("");
+ // Tableaux structurés uniquement lorsque les colonnes sont identifiables sans ambiguïté.
+ function structuredTable(product) {
+   const rows=String(product.description||"").split(/\n+/).map(s=>s.trim()).filter(Boolean);
+   if(product.page===5) {
+     const dims=rows.filter(s=>/^\d{2,4}\s*[x×]\s*\d{2,4}$/i.test(s));
+     return dims.length?{columns:["Dimension"],rows:dims.map(s=>[s])}:null;
+   }
+   if(product.page===86) {
+     const variants=[];
+     for(const row of rows){
+       const m=row.match(/^(EN\s+\S+(?:\s+(?:DIV|éco))?)\s+(\d+\s*ML)\s+(Ronde|Rectangulaire|Carrée|Ovale)\s+(.+)$/i);
+       if(m)variants.push([m[1],m[2],m[3],m[4]]);
+     }
+     return variants.length?{columns:["Référence","Capacité","Forme","Dimension"],rows:variants}:null;
+   }
+   if(product.page===83){
+     const variants=[];
+     for(const row of rows){
+       const m=row.match(/^(H-\d+)\s+-\s+(.+?)\s+(\d+[x×]\d+[x×]\d+)\s+(\d+\s+unités)$/i);
+       if(m)variants.push([m[1],m[2],m[3],m[4]]);
+     }
+     return variants.length?{columns:["Référence","Article","Dimension","Pack"],rows:variants}:null;
+   }
+   return null;
+ }
+ const structured=structuredTable(p);
+ const tableMarkup=structured?'<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+
+   structured.columns.map(x=>'<th scope="col">'+safe(x)+'</th>').join("")+'</tr></thead><tbody>'+
+   structured.rows.map(row=>'<tr>'+row.map(value=>'<td>'+safe(value)+'</td>').join("")+'</tr>').join("")+
+   '</tbody></table></div><p class="detail-source-note">Données reprises du catalogue officiel. Consultez les caractéristiques complètes ci-dessous.</p>':"";
  const subject=encodeURIComponent("Demande de devis — "+p.name);
  const body=encodeURIComponent("Bonjour,\nJe souhaite recevoir une offre pour : "+p.name+" (catalogue page "+p.page+").\nQuantité souhaitée : \nMerci.");
- target.innerHTML='<div class="detail-layout"><div class="detail-photos">'+imageMarkup+'</div><div class="detail-summary"><span class="eyebrow">'+safe(categories[p.category]||"Catalogue")+' · PAGE '+p.page+'</span><h1>'+safe(p.name)+'</h1><p class="detail-lead">Découvrez les caractéristiques et variantes disponibles dans notre catalogue professionnel.</p><p class="detail-price">Prix sur demande</p><div class="detail-cta"><a class="btn primary" href="mailto:faria@mdkimport.ch?subject='+subject+'&body='+body+'">Demander un devis ↗</a><a class="btn secondary" target="_blank" rel="noopener" href="MDKimport-Catalogue-2026-2027-FR.pdf#page='+p.page+'">Voir dans le catalogue ↗</a></div><p class="detail-hint">Précisez les dimensions, références et quantités souhaitées dans votre demande.</p></div></div><div class="detail-spec-section"><h2>Caractéristiques <em>et variantes.</em></h2><div class="detail-specs">'+specs+'</div></div><div class="detail-back"><a class="text-link" href="produits.html?categorie='+encodeURIComponent(p.category)+'">← Voir les autres produits de cette gamme</a></div>';
+ target.innerHTML='<div class="detail-layout"><div class="detail-photos">'+imageMarkup+'</div><div class="detail-summary"><span class="eyebrow">'+safe(categories[p.category]||"Catalogue")+' · PAGE '+p.page+'</span><h1>'+safe(p.name)+'</h1><p class="detail-lead">Découvrez les caractéristiques et variantes disponibles dans notre catalogue professionnel.</p><p class="detail-price">Prix sur demande</p><div class="detail-cta"><a class="btn primary" href="mailto:faria@mdkimport.ch?subject='+subject+'&body='+body+'">Demander un devis ↗</a><a class="btn secondary" target="_blank" rel="noopener" href="MDKimport-Catalogue-2026-2027-FR.pdf#page='+p.page+'">Voir dans le catalogue ↗</a></div><p class="detail-hint">Précisez les dimensions, références et quantités souhaitées dans votre demande.</p></div></div><div class="detail-spec-section"><h2>Caractéristiques <em>et variantes.</em></h2>'+tableMarkup+'<details class="detail-raw-specs" '+(structured?"":"open")+'><summary>Informations complètes du catalogue</summary><div class="detail-specs">'+specs+'</div></details></div><div class="detail-back"><a class="text-link" href="produits.html?categorie='+encodeURIComponent(p.category)+'">← Voir les autres produits de cette gamme</a></div>';
  const main=document.getElementById("detailMainImage");
  target.querySelectorAll("[data-img]").forEach(btn=>btn.addEventListener("click",()=>{
   const index=Number(btn.dataset.img);main.src=imgSrc(images[index]);main.alt=p.name+" — photo "+(index+1);

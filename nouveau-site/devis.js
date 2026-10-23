@@ -16,7 +16,7 @@
      const colours=colour.includes("/")?colour.split("/").map(c=>c.trim()).filter(Boolean):[colour];
      const packageIndex=id==="page-78"?g.columns?.findIndex(c=>/boîte/i.test(c)):-1;
      const pack=packageIndex>=0?String(row[packageIndex]||""):"";
-     const packs=pack.includes(" ou ")?pack.split(/\\s+ou\\s+/i).map(c=>c.trim()).filter(Boolean):[pack];
+     const packs=pack.includes(" ou ")?pack.split(/\s+ou\s+/i).map(c=>c.trim()).filter(Boolean):[pack];
      return colours.flatMap(singleColour=>packs.map(singlePack=>row.map((value,i)=>{
        const v=String(i===colourIndex?singleColour:i===packageIndex?singlePack:value??"").trim();
        if(!v)return "";

@@ -6,9 +6,16 @@
  const variantGroups=id=>{
    const groups=window.MDK_PDF_TABLES?.[id];
    if(!Array.isArray(groups))return [];
-   // Page 101 contains several unrelated product families. MANCHETTE must only
-   // offer its own catalogue entry, not couvre-bottes, charlottes or peignoirs.
-   const scoped=id==="page-101"?groups.map(g=>({...g,rows:(g.rows||[]).filter(row=>/^manchette\\b/i.test(String(row?.[0]||"").trim()))})).filter(g=>g.rows.length):groups;
+   // Products named after a single family on a mixed catalogue page must not
+   // offer unrelated articles. Other pages intentionally represent full ranges.
+   const familyFilters={
+     "page-31":row=>true,
+     "page-101":row=>/^manchette\\b/i.test(String(row?.[0]||"").trim()),
+     "page-102":row=>/^cagoule\\b/i.test(String(row?.[0]||"").trim()),
+     "page-103":row=>/^protection pour coussins\\b/i.test(String(row?.[0]||"").trim()),
+     "page-104":row=>/^gants clown\\b/i.test(String(row?.[0]||"").trim())
+   };
+   const scoped=familyFilters[id]?groups.map(g=>({...g,rows:(g.rows||[]).filter(familyFilters[id])})).filter(g=>g.rows.length):groups;
    return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).map(row=>(Array.isArray(row)?row:[]).map((value,i)=>{
      const v=String(value??"").trim();
      if(!v)return "";

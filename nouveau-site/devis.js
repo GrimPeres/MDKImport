@@ -6,13 +6,11 @@
  const variantGroups=id=>{
    const groups=window.MDK_PDF_TABLES?.[id];
    if(!Array.isArray(groups))return [];
-   // Products named after a single family on a mixed catalogue page must not
-   // offer unrelated articles. Other pages intentionally represent full ranges.
+   // Each product now has its own family-specific table.
    const scoped=groups;
    return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).flatMap(row=>{
      if(!Array.isArray(row))return [];
-     // Page 26: preserve grouped colours in the catalogue table, but offer
-     // a separate selectable quote variant for each listed colour.
+     // Keep catalogue table rows intact while splitting material/colour choices in the quote.
      const colourIndex=["page-26","page-66","page-67","page-68"].includes(id)?g.columns?.findIndex(c=>/couleur|papier/i.test(c)):-1;
      const colour=colourIndex>=0?String(row[colourIndex]||""):"";
      const colours=colour.includes("/")?colour.split("/").map(c=>c.trim()).filter(Boolean):[colour];

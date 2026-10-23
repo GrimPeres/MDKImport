@@ -230,3 +230,16 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 
 /* Client feedback: WhatsApp contact and company values */
 .whatsapp-float{position:fixed;right:22px;bottom:22px;z-index:1000;display:inline-flex;align-items:center;gap:9px;padding:12px 18px;border-radius:999px;background:#168c4c;color:#fff;box-shadow:0 7px 24px #0003;font-weight:700;line-height:1.2}.whatsapp-float:hover,.whatsapp-float:focus-visible{background:#106b39;color:#fff}.whatsapp-float span:first-child{font-size:22px;line-height:1}.about-benefits{margin:8px 0 20px;padding-left:23px}.about-benefits li{margin:8px 0}@media(max-width:540px){.whatsapp-float{right:14px;bottom:14px;padding:12px 15px}}
+
+/* Responsive product tables: fit narrow tables; scroll only when genuinely necessary. */
+.detail-spec-section,.detail-table-section{min-width:0;max-width:100%}
+.detail-table-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.detail-variant-table{width:100%;min-width:0;table-layout:auto}
+.detail-variant-table th,.detail-variant-table td{overflow-wrap:anywhere;word-break:normal;white-space:normal}
+@media(max-width:600px){
+ .detail-variant-table{font-size:clamp(12px,3.4vw,14px)}
+ .detail-variant-table th,.detail-variant-table td{padding:10px 9px;line-height:1.4}
+ .detail-variant-table th{white-space:normal}
+ .detail-variant-table:has(tr>:nth-child(4)){min-width:540px}
+ .detail-variant-table:has(tr>:nth-child(6)){min-width:720px}
+}

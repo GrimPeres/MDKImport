@@ -368,3 +368,13 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
  .header-inner .brand img{max-width:135px;height:auto;max-height:54px}
  .header-inner .menu-toggle{padding:6px}
 }
+
+/* Multiple variant lines in each quote product */
+.devis-variant-rows{display:grid;gap:12px;margin-top:14px}
+.devis-variant-row{padding:14px;border:1px solid #dce6dc;border-radius:12px;background:#f8faf7;min-width:0}
+.devis-variant-row .devis-field-grid{margin:0}
+.devis-add-variant{display:inline-flex;align-items:center;gap:6px;margin-top:13px;padding:10px 14px;border:1px solid #397653;border-radius:100px;background:transparent;color:#20553a;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.devis-add-variant:hover{background:#e9f3e8}
+.devis-remove-variant{display:inline-block;margin-top:9px;padding:5px 0;border:0;background:transparent;color:#8a3636;font:inherit;font-size:12px;cursor:pointer}
+.devis-remove-variant:hover{text-decoration:underline}
+@media(max-width:550px){.devis-variant-row{padding:11px}.devis-add-variant{width:100%;justify-content:center}}

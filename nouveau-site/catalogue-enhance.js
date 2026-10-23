@@ -59,7 +59,7 @@ if (Array.isArray(window.MDK_CATALOGUE) && window.MDK_CATALOGUE.length) {
       const pics = images(p);
       const visual = pics.length
         ? '<img loading="lazy" src="' + imageUrl(pics[0]) + '" alt="' + escapeHtml(p.name) + '" onerror="this.replaceWith(document.createTextNode(\'▣\'))">'
-        : '<span aria-hidden="true">▣</span>';
+        : '<span class="catalogue-preview-label">Voir dans le catalogue<br>Page ' + p.page + '</span>';
       return '<article class="product-card catalogue-card"><a class="catalogue-card-link" href="produit.html?id=' + encodeURIComponent(p.id) + '"><div class="product-visual mdk-photo">' + visual +
         '</div><div class="product-body"><small>' + escapeHtml(categoryName(p.category)) + ' · P. ' + p.page +
         '</small><h3>' + escapeHtml(p.name) + '</h3><p>' + escapeHtml(excerpt(p.description)) +

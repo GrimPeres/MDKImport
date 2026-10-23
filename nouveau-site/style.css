@@ -348,3 +348,23 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
  .hero-art .art-caption{left:7%;bottom:7%;font-size:clamp(16px,5vw,23px)}
  .hero-art .art-caption span{font-size:9px}
 }
+
+/* Mobile quick access to the quote request, outside the hamburger navigation. */
+.header-mobile-actions{display:none}
+@media(max-width:850px){
+ .header-inner{justify-content:flex-start;gap:12px}
+ .header-inner .brand{margin-right:auto;min-width:0}
+ .header-mobile-actions{display:flex;align-items:center;flex:0 0 auto}
+ .header-mobile-actions .devis-mobile{display:inline-flex!important;align-items:center;justify-content:center;gap:7px;padding:9px 12px;border-radius:999px;background:var(--green);color:#fff!important;font-size:12px;font-weight:700;line-height:1.2;text-decoration:none}
+ .header-mobile-actions .devis-mobile [data-devis-count]{display:grid;place-items:center;min-width:21px;height:21px;padding:0 5px;border-radius:50%;background:var(--lime);color:var(--green);font-size:11px;font-weight:800}
+ .header-mobile-actions .devis-mobile:hover{background:var(--green2)}
+ .header-inner .menu-toggle{flex:0 0 auto;margin:0;line-height:1;padding:8px}
+ .header #navigation .devis-nav{display:none!important}
+}
+@media(max-width:390px){
+ .header-inner{gap:6px}
+ .header-mobile-actions .devis-mobile{padding:8px 9px;font-size:11px;gap:5px}
+ .header-mobile-actions .devis-mobile [data-devis-count]{min-width:19px;height:19px}
+ .header-inner .brand img{max-width:135px;height:auto;max-height:54px}
+ .header-inner .menu-toggle{padding:6px}
+}

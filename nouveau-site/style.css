@@ -16,3 +16,24 @@
 .catalogue-pagination button{background:#fff;border:1px solid var(--line);border-radius:100px;padding:10px 18px;color:var(--green);font-weight:700;cursor:pointer}
 .catalogue-pagination button:disabled{opacity:.35;cursor:not-allowed}
 @media(max-width:560px){.catalogue-pagination{gap:8px}.catalogue-pagination button{padding:9px 12px}.product-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Catalogue 2026–2027 — présentation et lisibilité */
+.product-card{transition:transform .2s ease,box-shadow .2s ease}
+.product-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px #173e2d10}
+.product-visual.mdk-photo{height:220px;background:#fff;border-bottom:1px solid var(--line)}
+.product-visual.mdk-photo img{width:100%;height:100%;object-fit:contain;padding:18px;background:white}
+.product-body h3{line-height:1.25}
+.product-body p{line-height:1.6}
+.mdk-gallery{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 0 16px;margin:20px 0}
+.mdk-gallery img{flex:0 0 180px;width:180px;height:180px;object-fit:contain;background:#f7f9f6;border:1px solid var(--line);border-radius:12px;padding:10px;scroll-snap-align:start}
+dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
+.specs-heading{font-size:13px;font-weight:800;color:var(--green);margin:24px 0 10px}
+.mdk-specs{max-height:290px;overflow-y:auto;display:grid;gap:5px;background:#f7f9f6;border:1px solid var(--line);border-radius:12px;padding:16px;font-size:13px;line-height:1.6;white-space:normal}
+.mdk-specs span{display:block}
+.mdk-specs span:first-child{font-weight:700}
+.price-label{display:block;margin-top:20px;color:var(--green)}
+.catalogue-pagination{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:32px;font-size:13px;color:var(--muted)}
+.catalogue-pagination button{background:#fff;border:1px solid var(--line);border-radius:100px;padding:10px 18px;color:var(--green);font-weight:700;cursor:pointer}
+.catalogue-pagination button:disabled{opacity:.35;cursor:not-allowed}
+.no-results{grid-column:1/-1}
+@media(max-width:550px){.product-visual.mdk-photo{height:230px}.mdk-gallery img{flex-basis:145px;width:145px;height:145px}.catalogue-pagination{gap:8px}.catalogue-pagination button{padding:9px 12px}}

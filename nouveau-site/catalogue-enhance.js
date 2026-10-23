@@ -59,7 +59,7 @@ if (Array.isArray(window.MDK_CATALOGUE) && window.MDK_CATALOGUE.length) {
       const pics = images(p);
       const visual = pics.length
         ? '<img loading="lazy" src="' + imageUrl(pics[0]) + '" alt="' + escapeHtml(p.name) + '" onerror="this.replaceWith(document.createTextNode(\'▣\'))">'
-        : '<span class="catalogue-preview-label">Voir dans le catalogue<br>Page ' + p.page + '</span>';
+        : '<span class="catalogue-photo-missing" aria-label="Photographie non disponible"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m3 17 5-5 4 4 3-3 6 6"/></svg><span>Photographie<br>non disponible</span></span>';
       return '<article class="product-card catalogue-card"><a class="catalogue-card-link" href="produit.html?id=' + encodeURIComponent(p.id) + '"><div class="product-visual mdk-photo">' + visual +
         '</div><div class="product-body"><small>' + escapeHtml(categoryName(p.category)) + ' · P. ' + p.page +
         '</small><h3>' + escapeHtml(p.name) + '</h3><p>' + escapeHtml(excerpt(p.description)) +

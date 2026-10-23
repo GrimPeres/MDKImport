@@ -3,19 +3,17 @@
  const key="mdk-devis-v1";
  const catalogue=Array.isArray(window.MDK_CATALOGUE)?window.MDK_CATALOGUE:[];
  const lookup=new Map(catalogue.map(p=>[p.id,p]));
- const variantOptions=id=>{
+ const variantGroups=id=>{
    const groups=window.MDK_PDF_TABLES?.[id];
    if(!Array.isArray(groups))return [];
-   const choices=[];
-   groups.forEach(g=>(g.rows||[]).forEach(row=>{
-     const label=(g.title?g.title+" — ":"")+row.map((value,i)=>{
-       const heading=g.columns?.[i]||"";
-       return heading?heading+": "+value:value;
-     }).join(" · ");
-     if(label&&!choices.includes(label))choices.push(label);
-   }));
-   return choices;
+   return groups.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).map(row=>(Array.isArray(row)?row:[]).map((value,i)=>{
+     const v=String(value??"").trim();
+     if(!v)return "";
+     const heading=String(g.columns?.[i]||"").trim();
+     return heading?heading+": "+v:v;
+   }).filter(Boolean).join(" · ")).filter(Boolean)})).filter(g=>g.options.length);
  };
+ const variantOptions=id=>[...new Set(variantGroups(id).flatMap(g=>g.options))];
  const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const read=()=>{try{const data=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(data)?data.filter(x=>lookup.has(x.id)).slice(0,100):[]}catch{return []}};
  const write=items=>{try{localStorage.setItem(key,JSON.stringify(items))}catch{};updateCount();window.dispatchEvent(new Event("mdk-devis-change"))};
@@ -27,7 +25,7 @@
    else updateCount();
    return true;
  }
- function set(id,field,value){const items=read();const item=items.find(x=>x.id===id);if(item){item[field]=String(value).slice(0,300);write(items)}}
+ function set(id,field,value){const items=read();const item=items.find(x=>x.id===id);if(item){item[field]=String(value).slice(0,800);write(items)}}
  function remove(id){write(read().filter(x=>x.id!==id))}
  function render(){
    const target=document.getElementById("devisItems");if(!target)return;
@@ -38,7 +36,7 @@
    target.innerHTML=items.map(x=>{
      const p=lookup.get(x.id);
      const image=p.images?.[0]?'<img loading="lazy" src="fotos/'+encodeURIComponent(p.images[0])+'" alt="'+safe(p.name)+'">':"";
-     return '<article class="devis-item" data-item="'+safe(x.id)+'"><div class="devis-photo">'+image+'</div><div class="devis-fields"><h3><a href="produit.html?id='+encodeURIComponent(x.id)+'">'+safe(p.name)+'</a></h3><small>Catalogue · Page '+p.page+'</small><div class="devis-field-grid"><label>Quantité souhaitée<input data-field="quantity" type="text" maxlength="100" placeholder="Ex. 100 unités" value="'+safe(x.quantity)+'"></label><label>Variante / dimension / référence'+(variantOptions(x.id).length?'<select data-field="variant"><option value="">Choisir une variante…</option>'+variantOptions(x.id).map(v=>'<option value="'+safe(v)+'" '+(x.variant===v?'selected':'')+'>'+safe(v)+'</option>').join("")+'<option value="__other__" '+(x.variant&& !variantOptions(x.id).includes(x.variant)?'selected':'')+'>Autre / à préciser</option></select><input class="devis-other-variant" data-field="variant-custom" maxlength="300" placeholder="Précisez votre variante" value="'+safe(variantOptions(x.id).includes(x.variant)?'':x.variant)+'" '+(x.variant&&!variantOptions(x.id).includes(x.variant)?'':'hidden')+'>':'<input data-field="variant" type="text" maxlength="300" placeholder="Précisez la référence ou la dimension" value="'+safe(x.variant)+'">')+'</label></div></div><button type="button" class="devis-remove" data-remove="'+safe(x.id)+'" aria-label="Retirer '+safe(p.name)+'">Retirer ×</button></article>';
+     return '<article class="devis-item" data-item="'+safe(x.id)+'"><div class="devis-photo">'+image+'</div><div class="devis-fields"><h3><a href="produit.html?id='+encodeURIComponent(x.id)+'">'+safe(p.name)+'</a></h3><small>Catalogue · Page '+p.page+'</small><div class="devis-field-grid"><label>Quantité souhaitée<input data-field="quantity" type="text" maxlength="100" placeholder="Ex. 100 unités" value="'+safe(x.quantity)+'"></label><label>Variante / dimension / référence'+(variantOptions(x.id).length?'<select data-field="variant"><option value="">Choisir une variante…</option>'+variantGroups(x.id).map(g=>'<optgroup label="'+safe(g.title)+'">'+g.options.map(v=>'<option value="'+safe(v)+'" '+(x.variant===v?'selected':'')+'>'+safe(v)+'</option>').join("")+'</optgroup>').join("")+'<option value="__other__" '+(x.variant&& !variantOptions(x.id).includes(x.variant)?'selected':'')+'>Autre / à préciser</option></select><input class="devis-other-variant" data-field="variant-custom" maxlength="300" placeholder="Précisez votre variante" value="'+safe(variantOptions(x.id).includes(x.variant)?'':x.variant)+'" '+(x.variant&&!variantOptions(x.id).includes(x.variant)?'':'hidden')+'>':'<input data-field="variant" type="text" maxlength="300" placeholder="Précisez la référence ou la dimension" value="'+safe(x.variant)+'">')+'</label></div></div><button type="button" class="devis-remove" data-remove="'+safe(x.id)+'" aria-label="Retirer '+safe(p.name)+'">Retirer ×</button></article>';
    }).join("");
    document.getElementById("devisTotal").textContent=items.length+" produit"+(items.length!==1?"s":"")+" sélectionné"+(items.length!==1?"s":"");
  }

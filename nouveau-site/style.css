@@ -117,3 +117,14 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .detail-spec-group:not(.detail-variants) .spec-number{display:none}
 .detail-spec-group:not(.detail-variants) .detail-spec-item{padding-left:20px}
 @media(max-width:550px){.detail-spec-list{grid-template-columns:1fr}.detail-spec-group h3{padding:12px 15px}.detail-spec-item{padding:11px 14px}}
+
+/* Tableaux de variantes extraites des données explicites du catalogue */
+.detail-table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:white}
+.detail-variant-table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;min-width:420px}
+.detail-variant-table th{background:#eaf2e6;color:var(--green);font-weight:800;padding:13px 16px;white-space:nowrap}
+.detail-variant-table td{padding:12px 16px;border-top:1px solid var(--line);vertical-align:top}
+.detail-variant-table tbody tr:nth-child(even){background:#fafbf9}
+.detail-source-note{font-size:12px;color:var(--muted);margin:12px 0 18px}
+.detail-raw-specs{margin-top:18px}
+.detail-raw-specs summary{cursor:pointer;color:var(--green);font-size:13px;font-weight:800;padding:12px 0}
+.detail-raw-specs .detail-specs{margin-top:12px}

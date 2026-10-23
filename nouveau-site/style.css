@@ -313,3 +313,9 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 @media(max-width:800px){.site-footer .footer-cta{padding:42px 0 37px}.site-footer .footer-main{grid-template-columns:repeat(2,minmax(0,1fr));padding:38px 0}.site-footer .footer-about{grid-column:1/-1}}
 @media(max-width:600px){.site-footer .footer-cta{flex-direction:column;align-items:stretch;gap:25px}.site-footer .footer-cta-button{justify-content:space-between;width:100%}.site-footer .footer-main{gap:30px 20px}.site-footer .footer-contact address{padding-left:0}.site-footer .footer-contact-link{font-size:12px}.site-footer .footer-contact-icon{display:none}}
 @media(max-width:380px){.site-footer .footer-main{grid-template-columns:1fr}.site-footer .footer-about{grid-column:auto}.site-footer .footer-contact address{padding-left:0}}
+
+/* Footer address aligned with other contact details */
+.site-footer .footer-address{display:flex;align-items:flex-start;gap:9px;margin-top:6px}
+.site-footer .footer-address address{padding-left:0;margin:0;font-size:13px;line-height:1.75}
+.site-footer .footer-contact-icon svg{width:17px;height:17px;display:block}
+@media(max-width:600px){.site-footer .footer-address .footer-contact-icon{display:inline-grid;flex:0 0 30px}.site-footer .footer-address address{padding-left:0}}

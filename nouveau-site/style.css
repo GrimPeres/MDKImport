@@ -263,3 +263,24 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .site-footer .footer-bottom a{color:#f4faf5}
 @media(max-width:800px){.site-footer .footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:35px;padding:46px 0 38px}.site-footer .footer-about{grid-column:1/-1;max-width:540px}}
 @media(max-width:480px){.site-footer .footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 18px;padding:40px 0 32px}.site-footer .footer-brand img{height:85px}.site-footer .footer-column h2{font-size:12px}.site-footer .footer-column a{font-size:13px}.site-footer .footer-bottom{align-items:flex-start;flex-direction:column;padding:20px 0 27px}}
+
+/* About section: full-width introduction with balanced two-column content */
+.about-redesign .about-intro{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);column-gap:clamp(35px,6vw,100px);align-items:end;margin-bottom:38px}
+.about-redesign .about-intro .eyebrow{grid-column:1/-1;margin-bottom:17px}
+.about-redesign .about-intro h2{max-width:700px}
+.about-redesign .about-intro>p{font-size:15px;line-height:1.8;margin:0 0 4px;color:var(--muted)}
+.about-redesign .about-story{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(30px,6vw,90px);align-items:start;padding-top:34px;border-top:1px solid var(--line)}
+.about-redesign .about-story-text p{max-width:600px;line-height:1.85;margin:0 0 18px}
+.about-redesign .about-story-text .btn{margin-top:12px}
+.about-redesign .about-values{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:27px 32px}
+.about-redesign .about-values h3{font-size:18px;color:var(--green);margin:0 0 17px}
+.about-redesign .about-benefits{list-style:none;padding:0;margin:0}
+.about-redesign .about-benefits li{position:relative;padding:0 0 0 27px;margin:0 0 14px;font-size:14px;line-height:1.6}
+.about-redesign .about-benefits li:last-child{margin-bottom:0}
+.about-redesign .about-benefits li:before{content:"✓";position:absolute;left:0;top:0;color:var(--green2);font-weight:800}
+.category-icon svg{display:block;width:26px;height:26px}
+.catalogue-photo-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;color:#708679;font-size:13px;line-height:1.45;font-weight:600;letter-spacing:0}
+.catalogue-photo-missing svg{width:38px;height:38px;opacity:.65}
+.product-visual.mdk-photo .catalogue-photo-missing{font-size:13px}
+@media(max-width:850px){.about-redesign .about-intro{grid-template-columns:1fr;gap:16px}.about-redesign .about-story{grid-template-columns:1fr;gap:24px}.about-redesign .about-intro .eyebrow{margin-bottom:0}}
+@media(max-width:550px){.about-redesign .about-values{padding:23px 21px}.category-icon svg{width:24px;height:24px}}

@@ -63,8 +63,8 @@ if (Array.isArray(window.MDK_CATALOGUE) && window.MDK_CATALOGUE.length) {
       return '<article class="product-card"><div class="product-visual mdk-photo">' + visual +
         '</div><div class="product-body"><small>' + escapeHtml(categoryName(p.category)) + ' · P. ' + p.page +
         '</small><h3>' + escapeHtml(p.name) + '</h3><p>' + escapeHtml(excerpt(p.description)) +
-        '</p><div class="product-bottom"><span>Prix sur demande</span><button type="button" data-product="' +
-        escapeHtml(p.id) + '">Voir le détail ↗</button></div></div></article>';
+        '</p><div class="product-bottom"><span>Prix sur demande</span><a class="product-detail-link" href="produit.html?id=' +
+        encodeURIComponent(p.id) + '">Voir le produit ↗</a></div></div></article>';
     }).join("") || '<p class="no-results">Aucun produit trouvé. Essayez une autre recherche.</p>';
     pagination.innerHTML = totalPages > 1
       ? '<button type="button" data-move="-1" ' + (page===1 ? "disabled" : "") +

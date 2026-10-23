@@ -43,6 +43,39 @@
  // Tableaux structurés uniquement lorsque les colonnes sont identifiables sans ambiguïté.
  function structuredTable(product) {
    const rows=String(product.description||"").split(/\n+/).map(s=>s.trim()).filter(Boolean);
+   // Les tableaux séparés par | conservent leurs colonnes exactes.
+   const pipeGroups=[];
+   let current=null;
+   for(const line of rows){
+     if(!line.includes("|"))continue;
+     const cells=line.split("|").map(s=>s.trim());
+     if(cells.length<3)continue;
+     if(cells[0].toLocaleUpperCase("fr")==="RÉFÉRENCE"){
+       current={columns:cells,rows:[]};
+       pipeGroups.push(current);
+     }else if(current&&cells.length===current.columns.length)current.rows.push(cells);
+   }
+   if(pipeGroups.some(group=>group.rows.length)){
+     return {groups:pipeGroups.filter(group=>group.rows.length)};
+   }
+   if(product.page===8){
+     const start=rows.findIndex(line=>line.startsWith("DIMENSION EMBALLAGE"));
+     const triples=[];
+     for(let i=start+2;i+2<rows.length;i+=3){
+       if(!/^\d+[x×]\d+[x×][\d,]+$/i.test(rows[i]))break;
+       if(!/unités/i.test(rows[i+2]))break;
+       triples.push([rows[i],rows[i+1],rows[i+2]]);
+     }
+     if(triples.length)return {columns:["Dimension","Couleur","Emballage"],rows:triples};
+   }
+   if(product.page===61){
+     const variants=[];
+     for(const row of rows){
+       const m=row.match(/^(Boîte Pizza \d+)\s+\(([^)]+)\)\s+(\d+\s+unités)$/i);
+       if(m)variants.push([m[1],m[2],m[3]]);
+     }
+     if(variants.length)return {columns:["Article","Dimension","Pack"],rows:variants};
+   }
    if(product.page===5) {
      const dims=rows.filter(s=>/^\d{2,4}\s*[x×]\s*\d{2,4}$/i.test(s));
      return dims.length?{columns:["Dimension"],rows:dims.map(s=>[s])}:null;
@@ -66,10 +99,14 @@
    return null;
  }
  const structured=structuredTable(p);
- const tableMarkup=structured?'<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+
-   structured.columns.map(x=>'<th scope="col">'+safe(x)+'</th>').join("")+'</tr></thead><tbody>'+
-   structured.rows.map(row=>'<tr>'+row.map(value=>'<td>'+safe(value)+'</td>').join("")+'</tr>').join("")+
-   '</tbody></table></div><p class="detail-source-note">Données reprises du catalogue officiel. Consultez les caractéristiques complètes ci-dessous.</p>':"";
+ const tableGroups=structured?(structured.groups||[structured]):[];
+ const tableMarkup=tableGroups.map((group,index)=>
+   '<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+
+   group.columns.map(x=>'<th scope="col">'+safe(x)+'</th>').join("")+'</tr></thead><tbody>'+
+   group.rows.map(row=>'<tr>'+row.map(value=>'<td>'+safe(value)+'</td>').join("")+'</tr>').join("")+
+   '</tbody></table></div>').join("")+
+   (structured?'<p class="detail-source-note">Données reprises du catalogue officiel. Consultez les caractéristiques complètes ci-dessous.</p>':"");
+
  const subject=encodeURIComponent("Demande de devis — "+p.name);
  const body=encodeURIComponent("Bonjour,\nJe souhaite recevoir une offre pour : "+p.name+" (catalogue page "+p.page+").\nQuantité souhaitée : \nMerci.");
  target.innerHTML='<div class="detail-layout"><div class="detail-photos">'+imageMarkup+'</div><div class="detail-summary"><span class="eyebrow">'+safe(categories[p.category]||"Catalogue")+' · PAGE '+p.page+'</span><h1>'+safe(p.name)+'</h1><p class="detail-lead">Découvrez les caractéristiques et variantes disponibles dans notre catalogue professionnel.</p><p class="detail-price">Prix sur demande</p><div class="detail-cta"><a class="btn primary" href="mailto:faria@mdkimport.ch?subject='+subject+'&body='+body+'">Demander un devis ↗</a><a class="btn secondary" target="_blank" rel="noopener" href="MDKimport-Catalogue-2026-2027-FR.pdf#page='+p.page+'">Voir dans le catalogue ↗</a></div><p class="detail-hint">Précisez les dimensions, références et quantités souhaitées dans votre demande.</p></div></div><div class="detail-spec-section"><h2>Caractéristiques <em>et variantes.</em></h2>'+tableMarkup+'<details class="detail-raw-specs" '+(structured?"":"open")+'><summary>Informations complètes du catalogue</summary><div class="detail-specs">'+specs+'</div></details></div><div class="detail-back"><a class="text-link" href="produits.html?categorie='+encodeURIComponent(p.category)+'">← Voir les autres produits de cette gamme</a></div>';

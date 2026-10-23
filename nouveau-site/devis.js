@@ -16,12 +16,20 @@
      "page-104":row=>/^gants clown\\b/i.test(String(row?.[0]||"").trim())
    };
    const scoped=familyFilters[id]?groups.map(g=>({...g,rows:(g.rows||[]).filter(familyFilters[id])})).filter(g=>g.rows.length):groups;
-   return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).map(row=>(Array.isArray(row)?row:[]).map((value,i)=>{
-     const v=String(value??"").trim();
-     if(!v)return "";
-     const heading=String(g.columns?.[i]||"").trim();
-     return heading?heading+": "+v:v;
-   }).filter(Boolean).join(" · ")).filter(Boolean)})).filter(g=>g.options.length);
+   return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).flatMap(row=>{
+     if(!Array.isArray(row))return [];
+     // Page 26: preserve grouped colours in the catalogue table, but offer
+     // a separate selectable quote variant for each listed colour.
+     const colourIndex=id==="page-26"?g.columns?.findIndex(c=>/couleur/i.test(c)):-1;
+     const colour=colourIndex>=0?String(row[colourIndex]||""):"";
+     const colours=colour.includes("/")?colour.split("/").map(c=>c.trim()).filter(Boolean):[colour];
+     return colours.map(singleColour=>row.map((value,i)=>{
+       const v=String(i===colourIndex?singleColour:value??"").trim();
+       if(!v)return "";
+       const heading=String(g.columns?.[i]||"").trim();
+       return heading?heading+": "+v:v;
+     }).filter(Boolean).join(" · "));
+   }).filter(Boolean)})).filter(g=>g.options.length);
  };
  const variantOptions=id=>[...new Set(variantGroups(id).flatMap(g=>g.options))];
  const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));

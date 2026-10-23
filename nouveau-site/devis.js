@@ -15,7 +15,7 @@
  };
  const variantOptions=id=>[...new Set(variantGroups(id).flatMap(g=>g.options))];
  const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
- const read=()=>{try{const data=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(data)?data.filter(x=>lookup.has(x.id)).slice(0,100).map(x=>({...x,variant:variantOptions(x.id).includes(x.variant)?x.variant:""})):[]}catch{return []}};
+ const read=()=>{try{const data=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(data)?data.filter(x=>lookup.has(x.id)).slice(0,100).map(x=>({...x,variants:Array.isArray(x.variants)&&x.variants.length?x.variants:[{variant:variantOptions(x.id).includes(x.variant)?x.variant:"",quantity:x.quantity||""}]})):[]}catch{return []}};
  const write=items=>{try{localStorage.setItem(key,JSON.stringify(items))}catch{};updateCount();window.dispatchEvent(new Event("mdk-devis-change"))};
  function updateCount(){document.querySelectorAll("[data-devis-count]").forEach(el=>el.textContent=String(read().length))}
  function add(id){
@@ -25,7 +25,9 @@
    else updateCount();
    return true;
  }
- function set(id,field,value){const items=read();const item=items.find(x=>x.id===id);if(item){item[field]=String(value).slice(0,800);write(items)}}
+ function set(id,index,field,value){const items=read();const item=items.find(x=>x.id===id);if(item&&item.variants[index]){item.variants[index][field]=String(value).slice(0,800);write(items)}}
+ function addVariant(id){const items=read(),item=items.find(x=>x.id===id);if(item&&item.variants.length<30){item.variants.push({variant:"",quantity:""});write(items);render()}}
+ function removeVariant(id,index){const items=read(),item=items.find(x=>x.id===id);if(item&&item.variants.length>1){item.variants.splice(index,1);write(items);render()}}
  function remove(id){write(read().filter(x=>x.id!==id))}
  function render(){
    const target=document.getElementById("devisItems");if(!target)return;
@@ -36,20 +38,25 @@
    target.innerHTML=items.map(x=>{
      const p=lookup.get(x.id);
      const image=p.images?.[0]?'<img loading="lazy" src="fotos/'+encodeURIComponent(p.images[0])+'" alt="'+safe(p.name)+'">':"";
-     return '<article class="devis-item" data-item="'+safe(x.id)+'"><div class="devis-photo">'+image+'</div><div class="devis-fields"><h3><a href="produit.html?id='+encodeURIComponent(x.id)+'">'+safe(p.name)+'</a></h3><small>Catalogue · Page '+p.page+'</small><div class="devis-field-grid"><label>Quantité souhaitée<input data-field="quantity" type="text" maxlength="100" placeholder="Ex. 100 unités" value="'+safe(x.quantity)+'"></label><label>Variante / dimension / référence'+(variantOptions(x.id).length?'<select data-field="variant" required><option value="">Choisir une variante…</option>'+variantGroups(x.id).map(g=>'<optgroup label="'+safe(g.title)+'">'+g.options.map(v=>'<option value="'+safe(v)+'" '+(x.variant===v?'selected':'')+'>'+safe(v)+'</option>').join("")+'</optgroup>').join("")+'</select>':'<span class="devis-no-variant">Variantes à confirmer auprès de MDK Import</span>')+'</label></div></div><button type="button" class="devis-remove" data-remove="'+safe(x.id)+'" aria-label="Retirer '+safe(p.name)+'">Retirer ×</button></article>';
+     const groups=variantGroups(x.id),hasVariants=variantOptions(x.id).length>0;
+     const rows=x.variants.map((v,i)=>'<div class="devis-variant-row" data-variant-index="'+i+'"><div class="devis-field-grid"><label>Quantité souhaitée<input data-field="quantity" type="text" maxlength="100" placeholder="Ex. 100 unités" value="'+safe(v.quantity)+'"></label><label>Variante / dimension / référence'+(hasVariants?'<select data-field="variant" required><option value="">Choisir une variante…</option>'+groups.map(g=>'<optgroup label="'+safe(g.title)+'">'+g.options.map(option=>'<option value="'+safe(option)+'" '+(v.variant===option?'selected':'')+'>'+safe(option)+'</option>').join("")+'</optgroup>').join("")+'</select>':'<span class="devis-no-variant">Variantes à confirmer auprès de MDK Import</span>')+'</label></div>'+(x.variants.length>1?'<button type="button" class="devis-remove-variant" data-remove-variant="'+i+'">Retirer cette variante ×</button>':'')+'</div>').join("");
+     return '<article class="devis-item" data-item="'+safe(x.id)+'"><div class="devis-photo">'+image+'</div><div class="devis-fields"><h3><a href="produit.html?id='+encodeURIComponent(x.id)+'">'+safe(p.name)+'</a></h3><small>Catalogue · Page '+p.page+'</small><div class="devis-variant-rows">'+rows+'</div>'+(hasVariants?'<button type="button" class="devis-add-variant" data-add-variant="'+safe(x.id)+'">+ Ajouter une autre variante</button>':'')+'</div><button type="button" class="devis-remove" data-remove="'+safe(x.id)+'" aria-label="Retirer '+safe(p.name)+'">Retirer ×</button></article>';
    }).join("");
    document.getElementById("devisTotal").textContent=items.length+" produit"+(items.length!==1?"s":"")+" sélectionné"+(items.length!==1?"s":"");
  }
  document.addEventListener("click",e=>{
    const btn=e.target.closest("[data-add-devis]");
    if(btn){if(add(btn.dataset.addDevis)){btn.textContent="✓ Ajouté à ma demande";btn.classList.add("added");const msg=document.getElementById("devisFeedback");if(msg){msg.hidden=false;msg.textContent="Produit ajouté. Vous pouvez continuer votre sélection ou consulter votre demande."}}}
+   const plus=e.target.closest("[data-add-variant]");if(plus)addVariant(plus.dataset.addVariant);
+   const minus=e.target.closest("[data-remove-variant]");if(minus){const item=minus.closest("[data-item]");if(item)removeVariant(item.dataset.item,Number(minus.dataset.removeVariant))}
    const del=e.target.closest("[data-remove]");
    if(del){remove(del.dataset.remove);render()}
  });
+ document.addEventListener("change",e=>{if(e.target.matches("select[data-field]")){const field=e.target,item=field.closest("[data-item]");if(item)set(item.dataset.item,Number(field.closest("[data-variant-index]").dataset.variantIndex),"variant",field.value)}});
  document.addEventListener("input",e=>{
    const field=e.target.closest("[data-field]");
    if(field){const item=field.closest("[data-item]");if(!item)return;
-     set(item.dataset.item,field.dataset.field,field.value);
+     set(item.dataset.item,Number(field.closest("[data-variant-index]").dataset.variantIndex),field.dataset.field,field.value);
    }
  });
  window.addEventListener("mdk-devis-change",updateCount);
@@ -58,10 +65,10 @@
    document.getElementById("devisForm").addEventListener("submit",e=>{
      e.preventDefault();
      const items=read();if(!items.length)return;
-     const missing=items.find(item=>variantOptions(item.id).length&&!item.variant);if(missing){const select=document.querySelector('[data-item="'+missing.id+'"] [data-field="variant"]');if(select){select.focus();select.reportValidity()}return;}
+     const missing=items.find(item=>variantOptions(item.id).length&&item.variants.some(v=>!v.variant));if(missing){const select=[...document.querySelectorAll('[data-item="'+missing.id+'"] [data-field="variant"]')].find(el=>!el.value);if(select){select.focus();select.reportValidity()}return;}
      const subject="Demande de devis — MDK Import — "+items.length+" produit"+(items.length>1?"s":"");
      const lines=["Bonjour,","","Je souhaite recevoir une offre pour les produits suivants :",""];
-     items.forEach((item,i)=>{const p=lookup.get(item.id);lines.push((i+1)+". "+p.name+" (catalogue p. "+p.page+")","Quantité : "+(item.quantity.trim()||"À préciser"),"Variante / référence : "+(item.variant.trim()||"Non spécifiée dans le catalogue"),"")});
+     items.forEach((item,i)=>{const p=lookup.get(item.id);lines.push((i+1)+". "+p.name+" (catalogue p. "+p.page+")");item.variants.forEach((v,j)=>{lines.push("  Variante "+(j+1)+" : "+(v.variant.trim()||"Non spécifiée dans le catalogue"),"  Quantité : "+(v.quantity.trim()||"À préciser"))});lines.push("")});
      const name=document.getElementById("devisName").value.trim();
      const company=document.getElementById("devisCompany").value.trim();
      const contact=document.getElementById("devisContact").value.trim();

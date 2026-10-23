@@ -58,6 +58,25 @@
    if(pipeGroups.some(group=>group.rows.length)){
      return {groups:pipeGroups.filter(group=>group.rows.length)};
    }
+   if(product.page===47){
+     // Le texte extrait entrelace les deux colonnes du PDF : les groupes
+     // sont vérifiés sur la page 47 du catalogue, et non devinés par position.
+     return {groups:[
+       {title:"Film alimentaire industriel",columns:["Dimension","Boîte"],rows:[
+         ["250 mm x150","1 Rouleau"],["300 mm x150","1 Rouleau"],
+         ["350 mm x150","1 Rouleau"],["380 mm x150","1 Rouleau"],
+         ["400 mm x150","1 Rouleau"],["430 mm x150","1 Rouleau"],
+         ["450 mm x150","1 Rouleau"],["500 mm x150","1 Rouleau"]
+       ]},
+       {title:"Film alimentaire domestique",columns:["Dimension","Boîte"],rows:[
+         ["300 mm x 25","4 rouleaux"],["450 mm x 25","4 rouleaux"],
+         ["300 mm x 3","24 rouleaux"]
+       ]},
+       {title:"Film alimentaire domestique avec lame de coupe",columns:["Dimension","Boîte"],rows:[
+         ["300 mm x 25","6 rouleaux"],["450 mm x 25","6 rouleaux"]
+       ]}
+     ]};
+   }
    if(product.page===8){
      const start=rows.findIndex(line=>line.startsWith("DIMENSION EMBALLAGE"));
      const triples=[];
@@ -101,10 +120,10 @@
  const structured=structuredTable(p);
  const tableGroups=structured?(structured.groups||[structured]):[];
  const tableMarkup=tableGroups.map((group,index)=>
-   '<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+
+   '<section class="detail-table-section">'+(group.title?'<h3>'+safe(group.title)+'</h3>':'')+'<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+
    group.columns.map(x=>'<th scope="col">'+safe(x)+'</th>').join("")+'</tr></thead><tbody>'+
    group.rows.map(row=>'<tr>'+row.map(value=>'<td>'+safe(value)+'</td>').join("")+'</tr>').join("")+
-   '</tbody></table></div>').join("")+
+   '</tbody></table></div></section>').join("")+
    (structured?'<p class="detail-source-note">Données reprises du catalogue officiel. Consultez les caractéristiques complètes ci-dessous.</p>':"");
 
  const subject=encodeURIComponent("Demande de devis — "+p.name);

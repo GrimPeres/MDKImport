@@ -326,20 +326,10 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .site-footer .footer-cta-button span,.site-footer .footer-cta-button span[aria-hidden]{color:#153629!important;opacity:1;font-weight:800}
 .site-footer .footer-cta-button:hover span{color:#153629!important}
 
-/* Hero: real MDK catalogue photography in the two existing art frames.
-   page 43 = film étirable; page 7 = sac TNT réutilisable. */
-.hero-art .art-shape{background-color:#f7faf4;background-position:center;background-repeat:no-repeat;background-size:cover;border:3px solid rgba(255,255,255,.88);box-shadow:16px 18px 0 rgba(12,53,34,.24),0 12px 32px rgba(10,42,27,.16);overflow:hidden}
-.hero-art .art-shape.shape-one{background-image:url("fotos/p043-1.jpg")}
-.hero-art .art-shape.shape-two{background-image:url("fotos/p007-1.jpg")}
-
-/* Isolated transparent product illustrations; retain the original tilted green tiles. */
-.hero-art .art-shape{background-size:contain;background-position:center;background-repeat:no-repeat;background-color:#e6efcf;border:0}
-.hero-art .art-shape.shape-one{background-image:url("assets/hero-film.svg");background-color:#e6efcf}
-.hero-art .art-shape.shape-two{background-image:url("assets/hero-sac-tnt.svg");background-color:#a3c49b}
-
-/* Product cut-outs, kept independent of the tilted art-shape backgrounds.
-   Place hero-film.webp and hero-sac-tnt.webp in nouveau-site/assets/. */
-.hero-art .art-shape{overflow:visible;background-image:none!important;border:0;isolation:isolate}
+/* Hero product cut-outs: photorealistic transparent WebP assets. */
+.hero-art .art-shape{overflow:visible;isolation:isolate;border:0;background-image:none;background-size:contain;background-repeat:no-repeat;box-shadow:25px 25px 0 #123e2a60}
+.hero-art .art-shape.shape-one{background-color:#e6efcf}
+.hero-art .art-shape.shape-two{background-color:#a3c49b}
 .hero-art .art-shape::after{content:"";position:absolute;z-index:1;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;filter:drop-shadow(0 12px 12px rgba(12,48,30,.20))}
 .hero-art .art-shape.shape-one::after{inset:-18% -32%;background-image:url("assets/hero-film.webp");transform:rotate(17deg)}
 .hero-art .art-shape.shape-two::after{inset:-23% -25%;background-image:url("assets/hero-sac-tnt.webp");transform:rotate(-19deg)}

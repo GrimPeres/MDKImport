@@ -6,7 +6,10 @@
  const variantGroups=id=>{
    const groups=window.MDK_PDF_TABLES?.[id];
    if(!Array.isArray(groups))return [];
-   return groups.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).map(row=>(Array.isArray(row)?row:[]).map((value,i)=>{
+   // Page 101 contains several unrelated product families. MANCHETTE must only
+   // offer its own catalogue entry, not couvre-bottes, charlottes or peignoirs.
+   const scoped=id==="page-101"?groups.map(g=>({...g,rows:(g.rows||[]).filter(row=>/^manchette\\b/i.test(String(row?.[0]||"").trim()))})).filter(g=>g.rows.length):groups;
+   return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).map(row=>(Array.isArray(row)?row:[]).map((value,i)=>{
      const v=String(value??"").trim();
      if(!v)return "";
      const heading=String(g.columns?.[i]||"").trim();

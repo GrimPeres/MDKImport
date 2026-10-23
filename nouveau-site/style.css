@@ -243,3 +243,23 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
  .detail-variant-table:has(tr>:nth-child(4)){min-width:540px}
  .detail-variant-table:has(tr>:nth-child(6)){min-width:720px}
 }
+
+/* MDK Import — branded site footer */
+.site-footer{background:#112d21;color:#fff;padding:0;position:relative;overflow:hidden}
+.site-footer:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#b9d998,#6d9d74,#b9d998)}
+.site-footer .footer-main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1fr);gap:clamp(28px,5vw,85px);padding:62px 0 52px;align-items:start}
+.site-footer .footer-about{max-width:380px}
+.site-footer .footer-brand{display:inline-flex;align-items:center;margin-bottom:18px}
+.site-footer .footer-brand img{display:block;width:auto;height:105px;max-width:180px;object-fit:contain;filter:grayscale(1) brightness(0) invert(1)}
+.site-footer .footer-about p{margin:0 0 17px;line-height:1.75;color:#d9e7db;font-size:14px}
+.site-footer .footer-location{font-size:12px;color:#acc6b3;letter-spacing:.04em}
+.site-footer .footer-column{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.site-footer .footer-column h2{font:700 13px/1.4 system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#c9e3a3;margin:0 0 10px}
+.site-footer .footer-column a{font-size:14px;line-height:1.5;color:#f4faf5;text-decoration:none;overflow-wrap:anywhere}
+.site-footer .footer-column a:hover,.site-footer .footer-bottom a:hover{color:#c9e3a3;text-decoration:underline;text-underline-offset:4px}
+.site-footer .footer-column address{font-style:normal;font-size:13px;line-height:1.75;color:#b9d0c0;margin-top:8px}
+.site-footer .footer-bottom{border-top:1px solid #ffffff2b;padding:23px 0 27px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px 28px;font-size:12px}
+.site-footer .footer-bottom span{color:#b9d0c0}
+.site-footer .footer-bottom a{color:#f4faf5}
+@media(max-width:800px){.site-footer .footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:35px;padding:46px 0 38px}.site-footer .footer-about{grid-column:1/-1;max-width:540px}}
+@media(max-width:480px){.site-footer .footer-main{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 18px;padding:40px 0 32px}.site-footer .footer-brand img{height:85px}.site-footer .footer-column h2{font-size:12px}.site-footer .footer-column a{font-size:13px}.site-footer .footer-bottom{align-items:flex-start;flex-direction:column;padding:20px 0 27px}}

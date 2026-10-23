@@ -331,3 +331,8 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .hero-art .art-shape{background-color:#f7faf4;background-position:center;background-repeat:no-repeat;background-size:cover;border:3px solid rgba(255,255,255,.88);box-shadow:16px 18px 0 rgba(12,53,34,.24),0 12px 32px rgba(10,42,27,.16);overflow:hidden}
 .hero-art .art-shape.shape-one{background-image:url("fotos/p043-1.jpg")}
 .hero-art .art-shape.shape-two{background-image:url("fotos/p007-1.jpg")}
+
+/* Isolated transparent product illustrations; retain the original tilted green tiles. */
+.hero-art .art-shape{background-size:contain;background-position:center;background-repeat:no-repeat;background-color:#e6efcf;border:0}
+.hero-art .art-shape.shape-one{background-image:url("assets/hero-film.svg");background-color:#e6efcf}
+.hero-art .art-shape.shape-two{background-image:url("assets/hero-sac-tnt.svg");background-color:#a3c49b}

@@ -105,3 +105,15 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .product-detail-link:hover{text-decoration:underline}
 @media(max-width:850px){.detail-layout{grid-template-columns:1fr;gap:28px}.detail-main-photo{min-height:320px}.detail-main-photo img{height:320px}.detail-spec-section{margin-top:55px}}
 @media(max-width:550px){.detail-page{padding-top:30px}.detail-main-photo img{height:260px}.detail-main-photo{min-height:260px}.detail-cta .btn{width:100%}}
+
+/* Présentation des caractéristiques et variantes du catalogue */
+.detail-specs{display:grid;gap:22px;max-width:100%;background:none;border:0;padding:0}
+.detail-spec-group{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff;min-width:0}
+.detail-spec-group h3{margin:0;padding:14px 20px;font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--green);background:#eaf2e6}
+.detail-spec-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.detail-spec-item{display:flex;align-items:flex-start;gap:10px;padding:13px 18px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.detail-spec-item:nth-child(odd){background:#fafbf9}
+.spec-number{font-size:10px;min-width:22px;height:22px;border-radius:50%;background:#edf3eb;color:var(--green);display:grid;place-items:center;flex-shrink:0}
+.detail-spec-group:not(.detail-variants) .spec-number{display:none}
+.detail-spec-group:not(.detail-variants) .detail-spec-item{padding-left:20px}
+@media(max-width:550px){.detail-spec-list{grid-template-columns:1fr}.detail-spec-group h3{padding:12px 15px}.detail-spec-item{padding:11px 14px}}

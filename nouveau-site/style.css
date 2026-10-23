@@ -325,3 +325,9 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .category-icon svg{width:27px;height:27px;stroke:currentColor;fill:none}
 .site-footer .footer-cta-button span,.site-footer .footer-cta-button span[aria-hidden]{color:#153629!important;opacity:1;font-weight:800}
 .site-footer .footer-cta-button:hover span{color:#153629!important}
+
+/* Hero: real MDK catalogue photography in the two existing art frames.
+   page 43 = film étirable; page 7 = sac TNT réutilisable. */
+.hero-art .art-shape{background-color:#f7faf4;background-position:center;background-repeat:no-repeat;background-size:cover;border:3px solid rgba(255,255,255,.88);box-shadow:16px 18px 0 rgba(12,53,34,.24),0 12px 32px rgba(10,42,27,.16);overflow:hidden}
+.hero-art .art-shape.shape-one{background-image:url("fotos/p043-1.jpg")}
+.hero-art .art-shape.shape-two{background-image:url("fotos/p007-1.jpg")}

@@ -117,7 +117,8 @@
    }
    return null;
  }
- const structured=structuredTable(p);
+ const pdfGroups=window.MDK_PDF_TABLES&&window.MDK_PDF_TABLES[p.id];
+ const structured=pdfGroups?{groups:pdfGroups}:structuredTable(p);
  const tableGroups=structured?(structured.groups||[structured]):[];
  const tableMarkup=tableGroups.map((group,index)=>
    '<section class="detail-table-section">'+(group.title?'<h3>'+safe(group.title)+'</h3>':'')+'<div class="detail-table-wrap"><table class="detail-variant-table"><thead><tr>'+

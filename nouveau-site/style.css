@@ -319,3 +319,9 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .site-footer .footer-address address{padding-left:0;margin:0;font-size:13px;line-height:1.75}
 .site-footer .footer-contact-icon svg{width:17px;height:17px;display:block}
 @media(max-width:600px){.site-footer .footer-address .footer-contact-icon{display:inline-grid;flex:0 0 30px}.site-footer .footer-address address{padding-left:0}}
+
+/* Category pictograms and quote CTA contrast */
+.category-icon{flex:0 0 50px;background:#edf4e9;color:#16432f}
+.category-icon svg{width:27px;height:27px;stroke:currentColor;fill:none}
+.site-footer .footer-cta-button span,.site-footer .footer-cta-button span[aria-hidden]{color:#153629!important;opacity:1;font-weight:800}
+.site-footer .footer-cta-button:hover span{color:#153629!important}

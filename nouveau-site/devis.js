@@ -8,27 +8,23 @@
    if(!Array.isArray(groups))return [];
    // Products named after a single family on a mixed catalogue page must not
    // offer unrelated articles. Other pages intentionally represent full ranges.
-   const familyFilters={
-     "page-31":row=>true,
-     "page-101":row=>/^manchette\b/i.test(String(row?.[0]||"").trim()),
-     "page-102":row=>/^cagoule\b/i.test(String(row?.[0]||"").trim()),
-     "page-103":row=>/^protection pour coussins\b/i.test(String(row?.[0]||"").trim()),
-     "page-104":row=>/^gants clown\b/i.test(String(row?.[0]||"").trim())
-   };
-   const scoped=familyFilters[id]?groups.map(g=>({...g,rows:(g.rows||[]).filter(familyFilters[id])})).filter(g=>g.rows.length):groups;
+   const scoped=groups;
    return scoped.map(g=>({title:String(g.title||"Variantes"),options:(g.rows||[]).flatMap(row=>{
      if(!Array.isArray(row))return [];
      // Page 26: preserve grouped colours in the catalogue table, but offer
      // a separate selectable quote variant for each listed colour.
-     const colourIndex=id==="page-26"?g.columns?.findIndex(c=>/couleur/i.test(c)):-1;
+     const colourIndex=["page-26","page-66","page-67","page-68"].includes(id)?g.columns?.findIndex(c=>/couleur|papier/i.test(c)):-1;
      const colour=colourIndex>=0?String(row[colourIndex]||""):"";
      const colours=colour.includes("/")?colour.split("/").map(c=>c.trim()).filter(Boolean):[colour];
-     return colours.map(singleColour=>row.map((value,i)=>{
-       const v=String(i===colourIndex?singleColour:value??"").trim();
+     const packageIndex=id==="page-78"?g.columns?.findIndex(c=>/boîte/i.test(c)):-1;
+     const pack=packageIndex>=0?String(row[packageIndex]||""):"";
+     const packs=pack.includes(" ou ")?pack.split(/\\s+ou\\s+/i).map(c=>c.trim()).filter(Boolean):[pack];
+     return colours.flatMap(singleColour=>packs.map(singlePack=>row.map((value,i)=>{
+       const v=String(i===colourIndex?singleColour:i===packageIndex?singlePack:value??"").trim();
        if(!v)return "";
        const heading=String(g.columns?.[i]||"").trim();
        return heading?heading+": "+v:v;
-     }).filter(Boolean).join(" · "));
+     }).filter(Boolean).join(" · ")));
    }).filter(Boolean)})).filter(g=>g.options.length);
  };
  const variantOptions=id=>[...new Set(variantGroups(id).flatMap(g=>g.options))];

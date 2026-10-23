@@ -20,11 +20,29 @@
  const lines=String(p.description||"").split(/\n+/).map(x=>x.trim()).filter(Boolean);
  const upper=String(p.name||"").trim().toLocaleUpperCase("fr");
  const cleaned=lines.filter((line,i)=>!(i<3&&line.toLocaleUpperCase("fr")===upper));
- const headers=/^(ARTICLE|DIMENSION|DIMENSIONS|COULEUR|EMBALLAGE|RÉFÉRENCE|CAPACITÉ|BOÎTE|FORMAT|SOUFFLET|ÉPAISSEUR|MATIÈRE|OBSERVATIONS?|DESCRIPTION|DÉSIGNATION)(\s|$)/i;
- const specs=cleaned.map(line=>'<div class="spec-row'+(headers.test(line)&&line.length<75?' spec-row-heading':'')+'">'+safe(line)+'</div>').join("");
+ // En-têtes issus du catalogue : on ne devine pas les colonnes si elles ne sont pas explicites.
+ const headerLine=/^(ARTICLE|DIMENSION|DIMENSIONS|COULEUR|EMBALLAGE|RÉFÉRENCE|CAPACITÉ|BOÎTE|FORMAT|SOUFFLET|ÉPAISSEUR|MATIÈRE|OBSERVATIONS?|DESCRIPTION|DÉSIGNATION)(\\s|$)/i;
+ const tableHeaders=/^(RÉFÉRENCE|ARTICLE|DIMENSION|DIMENSIONS|FORMAT|CAPACITÉ|BOÎTE|DÉSIGNATION)(\\s|$)/i;
+ const sections=[];
+ let section={title:"",rows:[]};
+ for(const line of cleaned){
+   if(headerLine.test(line)&&line.length<85){
+     if(section.rows.length||section.title)sections.push(section);
+     section={title:line,rows:[]};
+   }else section.rows.push(line);
+ }
+ if(section.rows.length||section.title)sections.push(section);
+ const specs=sections.map((group,index)=>{
+   const isTable=tableHeaders.test(group.title)&&group.rows.length>=3;
+   return '<section class="detail-spec-group'+(isTable?' detail-variants':'')+'">'+
+    (group.title?'<h3>'+safe(group.title)+'</h3>':'')+
+    (group.rows.length?'<div class="detail-spec-list">'+group.rows.map((line,i)=>
+      '<div class="detail-spec-item"><span class="spec-number">'+(i+1)+'</span><span>'+safe(line)+'</span></div>').join("")+'</div>':'')+
+    '</section>';
+ }).join("");
  const subject=encodeURIComponent("Demande de devis — "+p.name);
  const body=encodeURIComponent("Bonjour,\nJe souhaite recevoir une offre pour : "+p.name+" (catalogue page "+p.page+").\nQuantité souhaitée : \nMerci.");
- target.innerHTML='<div class="detail-layout"><div class="detail-photos">'+imageMarkup+'</div><div class="detail-summary"><span class="eyebrow">'+safe(categories[p.category]||"Catalogue")+' · PAGE '+p.page+'</span><h1>'+safe(p.name)+'</h1><p class="detail-lead">Découvrez les caractéristiques et variantes disponibles dans notre catalogue professionnel.</p><p class="detail-price">Prix sur demande</p><div class="detail-cta"><a class="btn primary" href="mailto:faria@mdkimport.ch?subject='+subject+'&body='+body+'">Demander un devis ↗</a><a class="btn secondary" target="_blank" rel="noopener" href="MDKimport-Catalogue-2026-2027-FR.pdf#page='+p.page+'">Voir dans le catalogue ↗</a></div><p class="detail-hint">Précisez les dimensions, références et quantités souhaitées dans votre demande.</p></div></div><div class="detail-spec-section"><h2>Caractéristiques <em>et variantes.</em></h2><div class="mdk-specs detail-specs">'+specs+'</div></div><div class="detail-back"><a class="text-link" href="produits.html?categorie='+encodeURIComponent(p.category)+'">← Voir les autres produits de cette gamme</a></div>';
+ target.innerHTML='<div class="detail-layout"><div class="detail-photos">'+imageMarkup+'</div><div class="detail-summary"><span class="eyebrow">'+safe(categories[p.category]||"Catalogue")+' · PAGE '+p.page+'</span><h1>'+safe(p.name)+'</h1><p class="detail-lead">Découvrez les caractéristiques et variantes disponibles dans notre catalogue professionnel.</p><p class="detail-price">Prix sur demande</p><div class="detail-cta"><a class="btn primary" href="mailto:faria@mdkimport.ch?subject='+subject+'&body='+body+'">Demander un devis ↗</a><a class="btn secondary" target="_blank" rel="noopener" href="MDKimport-Catalogue-2026-2027-FR.pdf#page='+p.page+'">Voir dans le catalogue ↗</a></div><p class="detail-hint">Précisez les dimensions, références et quantités souhaitées dans votre demande.</p></div></div><div class="detail-spec-section"><h2>Caractéristiques <em>et variantes.</em></h2><div class="detail-specs">'+specs+'</div></div><div class="detail-back"><a class="text-link" href="produits.html?categorie='+encodeURIComponent(p.category)+'">← Voir les autres produits de cette gamme</a></div>';
  const main=document.getElementById("detailMainImage");
  target.querySelectorAll("[data-img]").forEach(btn=>btn.addEventListener("click",()=>{
   const index=Number(btn.dataset.img);main.src=imgSrc(images[index]);main.alt=p.name+" — photo "+(index+1);

@@ -326,10 +326,25 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .site-footer .footer-cta-button span,.site-footer .footer-cta-button span[aria-hidden]{color:#153629!important;opacity:1;font-weight:800}
 .site-footer .footer-cta-button:hover span{color:#153629!important}
 
-/* Hero product cut-outs: photorealistic transparent WebP assets. */
+/* Hero product cut-outs: slightly smaller, with controlled spacing. */
 .hero-art .art-shape{overflow:visible;isolation:isolate;border:0;background-image:none;background-size:contain;background-repeat:no-repeat;box-shadow:25px 25px 0 #123e2a60}
 .hero-art .art-shape.shape-one{background-color:#e6efcf}
 .hero-art .art-shape.shape-two{background-color:#a3c49b}
-.hero-art .art-shape::after{content:"";position:absolute;z-index:1;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;filter:drop-shadow(0 12px 12px rgba(12,48,30,.20))}
-.hero-art .art-shape.shape-one::after{inset:-18% -32%;background-image:url("assets/hero-film.webp");transform:rotate(17deg)}
-.hero-art .art-shape.shape-two::after{inset:-23% -25%;background-image:url("assets/hero-sac-tnt.webp");transform:rotate(-19deg)}
+.hero-art .art-shape::after{content:"";position:absolute;z-index:1;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;filter:drop-shadow(0 10px 10px rgba(12,48,30,.18))}
+.hero-art .art-shape.shape-one::after{inset:-8% -16%;background-image:url("assets/hero-film.webp");transform:rotate(17deg)}
+.hero-art .art-shape.shape-two::after{inset:-11% -12%;background-image:url("assets/hero-sac-tnt.webp");transform:rotate(-19deg)}
+/* Compact screens: scale tiles with the hero width, not fixed desktop pixels. */
+@media(max-width:850px){
+ .hero-art .art-shape.shape-one{width:31%;height:39%;top:17%;left:21%}
+ .hero-art .art-shape.shape-two{width:29%;height:34%;top:39%;right:15%}
+ .hero-art .art-shape{border-radius:clamp(16px,5vw,35px)}
+ .hero-art .art-caption{z-index:3}
+}
+@media(max-width:550px){
+ .hero-art .art-shape.shape-one{top:15%;left:19%}
+ .hero-art .art-shape.shape-two{top:38%;right:13%}
+ .hero-art .art-shape.shape-one::after{inset:-7% -12%}
+ .hero-art .art-shape.shape-two::after{inset:-8% -9%}
+ .hero-art .art-caption{left:7%;bottom:7%;font-size:clamp(16px,5vw,23px)}
+ .hero-art .art-caption span{font-size:9px}
+}

@@ -14,10 +14,24 @@ if (Array.isArray(window.MDK_CATALOGUE) && window.MDK_CATALOGUE.length) {
   pagination.setAttribute("aria-label", "Pagination du catalogue");
   byId("productGrid").after(pagination);
 
-  function formatDescription(raw) {
-    const lines = String(raw || "").split(/\n+/).map(s => s.trim()).filter(Boolean);
-    const cleaned = lines.filter((line,i) => i === 0 || line !== lines[i-1]);
-    return cleaned.map(line => "<span>" + escapeHtml(line) + "</span>").join("");
+  // Respecte le contenu du catalogue, tout en éliminant les en-têtes répétés.
+  function formatDescription(raw, product) {
+    const lines = String(raw || "").split(/\\n+/).map(s => s.trim()).filter(Boolean);
+    const title = String(product.name || "").trim().toLocaleUpperCase("fr");
+    const categoryHeaders = new Set(["SACS EN PLASTIQUE", "FILMS", "& GAINES", "PAPIER",
+      "CONSOMMABLES", "& JETABLES", "SANTÉ", "& PROTECTION", "ÉQUIPEMENTS"]);
+    const headings = /^(ARTICLE|DIMENSION|DIMENSIONS|COULEUR|EMBALLAGE|RÉFÉRENCE|CAPACITÉ|BOÎTE|FORMAT|SOUFFLET|ÉPAISSEUR|MATIÈRE|OBSERVATIONS?|DESCRIPTION|DÉSIGNATION)(\\s|$)/i;
+    const filtered = lines.filter((line, i) => {
+      const upper = line.toLocaleUpperCase("fr");
+      if (i < 3 && (upper === title || categoryHeaders.has(upper))) return false;
+      return i === 0 || line !== lines[i - 1];
+    });
+    const max = 240;
+    return filtered.slice(0,max).map(line => {
+      const heading = headings.test(line) && line.length < 75;
+      return '<div class="spec-row' + (heading ? ' spec-row-heading' : '') + '">' +
+        escapeHtml(line) + '</div>';
+    }).join("") + (filtered.length > max ? '<p class="spec-truncated">Voir le catalogue PDF pour la liste complète.</p>' : "");
   }
 
   function renderCategoriesCount() {
@@ -72,7 +86,7 @@ if (Array.isArray(window.MDK_CATALOGUE) && window.MDK_CATALOGUE.length) {
       '<h2 id="dialogTitle">' + escapeHtml(p.name) + '</h2>' +
       (gallery ? '<div class="mdk-gallery">' + gallery + '</div>' : "") +
       '<div class="specs-heading">Caractéristiques et variantes</div>' +
-      '<div class="mdk-specs">' + formatDescription(p.description) + '</div>' +
+      '<div class="mdk-specs">' + formatDescription(p.description, p) + '</div>' +
       '<strong class="price-label">Prix sur demande</strong>' +
       '<div class="dialog-actions"><a class="btn primary" href="mailto:faria@mdkimport.ch?subject=' + subject +
       '&body=' + body + '">Demander un devis ↗</a>' +

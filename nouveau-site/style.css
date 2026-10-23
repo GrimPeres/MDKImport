@@ -188,3 +188,7 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .devis-nav{display:inline-flex!important;align-items:center;gap:8px;white-space:nowrap}
 .devis-nav:not(.nav-contact){font-weight:700}
 @media(max-width:550px){.devis-page{padding:45px 0 75px}.devis-empty{padding:34px 20px}.detail-cta{align-items:flex-start;flex-direction:column}.detail-cta .btn{width:100%}}
+
+.detail-table-section{margin:0 0 24px}
+.detail-table-section>h3{font-size:15px;letter-spacing:.025em;font-weight:800;color:var(--green);margin:0 0 10px;padding:0}
+.detail-table-section .detail-table-wrap{margin:0}

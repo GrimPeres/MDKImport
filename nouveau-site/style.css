@@ -128,3 +128,33 @@ dialog{width:min(740px,calc(100% - 28px));max-height:90vh;overflow-y:auto}
 .detail-raw-specs{margin-top:18px}
 .detail-raw-specs summary{cursor:pointer;color:var(--green);font-size:13px;font-weight:800;padding:12px 0}
 .detail-raw-specs .detail-specs{margin-top:12px}
+
+/* Liste de demande de devis */
+.devis-nav{display:inline-flex;align-items:center;gap:7px;color:var(--green)!important;white-space:nowrap}
+.devis-nav [data-devis-count]{display:grid;place-items:center;background:var(--lime);color:var(--green);min-width:23px;height:23px;border-radius:50%;font-size:11px;font-weight:800}
+.devis-page{background:var(--cream);min-height:65vh}
+.devis-page h1{font:400 clamp(40px,5vw,66px)/1.12 Georgia,serif;letter-spacing:-.04em;margin:0 0 16px}
+.devis-page h1 em{color:var(--green2)}
+.devis-intro{color:var(--muted);max-width:680px}
+.devis-item{display:flex;align-items:start;gap:22px;background:white;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:14px}
+.devis-photo{width:115px;height:115px;flex:0 0 115px;display:grid;place-items:center;background:#f7f9f6;border-radius:12px}
+.devis-photo img{width:100%;height:100%;object-fit:contain;padding:8px}
+.devis-fields{flex:1;min-width:0}
+.devis-fields h3{font-size:18px;margin:0 0 4px}
+.devis-fields small{color:var(--muted)}
+.devis-field-grid,.devis-contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+.devis-contact-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin:20px 0}
+.devis-page label{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:var(--green)}
+.devis-page input,.devis-page textarea{border:1px solid var(--line);border-radius:10px;padding:12px;width:100%;background:white;color:var(--ink);font-size:14px;font-weight:400}
+.devis-remove{border:0;background:none;color:#a34444;cursor:pointer;font-size:12px}
+#devisForm{margin-top:50px;padding:32px;border:1px solid var(--line);border-radius:18px;background:white}
+#devisForm h2{font-size:36px}
+.devis-disclaimer,.devis-warning{font-size:12px;color:var(--muted);margin:18px 0}
+.devis-warning{color:#9d5227}
+.devis-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.devis-feedback{font-size:13px;color:var(--green);font-weight:700}
+.catalogue-add{background:#eaf2e6;color:var(--green);border:0;border-radius:30px;padding:8px 12px;cursor:pointer;font-size:12px;font-weight:700}
+.catalogue-add.added,.detail-cta .added{background:#dcebd4;color:var(--green)}
+.product-bottom{flex-wrap:wrap;gap:10px}
+@media(max-width:850px){.header nav{gap:14px}.devis-contact-grid{grid-template-columns:1fr}}
+@media(max-width:550px){.devis-item{flex-wrap:wrap;padding:15px;gap:12px}.devis-photo{width:80px;height:80px;flex-basis:80px}.devis-fields{flex-basis:calc(100% - 100px)}.devis-field-grid{grid-template-columns:1fr}.devis-remove{margin-left:auto}#devisForm{padding:20px}.devis-actions .btn{width:100%}}
